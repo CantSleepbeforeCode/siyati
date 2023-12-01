@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Redirect;
 class CustomerController extends Controller
 {
     protected $apiController;
-    public function __construct(APIController $apiController)
+    public function __construct(ApiController $apiController)
     {
         $this->apiController = $apiController;
         $this->middleware(function ($request, $next) {
