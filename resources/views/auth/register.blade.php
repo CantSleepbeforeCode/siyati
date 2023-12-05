@@ -31,13 +31,9 @@
                 <div class="mb-3">
                     <label for="" class="form-label">Kecamatan</label>
                     <select required name="customer_subdistrict" class="form-control">
-                        <option value="PALU UTARA">PALU UTARA</option>
-                        <option value="PALU BARAT">PALU BARAT</option>
-                        <option value="PALU TIMUR">PALU TIMUR</option>
-                        <option value="PALU SELATAN">PALU SELATAN</option>
-                        <option value="ULUJADI">ULUJADI</option>
-                        <option value="TAWAELI">TAWAELI</option>
-                        <option value="TATANGA">TATANGA</option>
+                        @foreach ($kecamatans as $kecamatan)
+                        <option value="{{$kecamatan->nama}}">{{$kecamatan->nama}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -45,28 +41,9 @@
                 <div class="mb-3">
                     <label for="" class="form-label">Kelurahan</label>
                     <select required name="customer_urban_village" class="form-control">
-                        <option value="BAYAOGE">BAYAOGE</option>
-                        <option value="PENGAWU">PENGAWU</option>
-                        <option value="NUNU">NUNU</option>
-                        <option value="TAWANJUKA">TAWANJUKA</option>
-                        <option value="DUYU">DUYU</option>
-                        <option value="SILAE">SILAE</option>
-                        <option value="TALISE">TALISE</option>
-                        <option value="TALISE VALANGGUNI">TALISE VALANGGUNI</option>
-                        <option value="TONDO">TONDO</option>
-                        <option value="MAMBORO">MAMBORO</option>
-                        <option value="MAMBORO BARAT">MAMBORO BARAT</option>
-                        <option value="TAIPA">TAIPA</option>
-                        <option value="BAIYA">BAIYA</option>
-                        <option value="BESUSU BARAT">BESUSU BARAT</option>
-                        <option value="BESUSU TENGAH">BESUSU TENGAH</option>
-                        <option value="BESUSU TIMUR">BESUSU TIMUR</option>
-                        <option value="UJUNA">UJUNA</option>
-                        <option value="BIROBULI UTARA">BIROBULI UTARA</option>
-                        <option value="BIROBULI SELATAN">BIROBULI SELATAN</option>
-                        <option value="LOLU SELATAN">LOLU SELATAN</option>
-                        <option value="LOLU UTARA">LOLU UTARA</option>
-                        <option value="TANAMODINDI">TANAMODINDI</option>
+                        @foreach ($kelurahans as $kelurahan)
+                        <option value="{{$kelurahan->nama}}">{{$kelurahan->nama}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -87,7 +64,7 @@
             </div>
         </div>
         <div class="mb-4">
-            <label for="" class="form-label">Foto Selfie & KTP</label>
+            <label for="" class="form-label">Foto Rumah</label>
             <input type="file" required name="customer_photo" class="form-control" id="">
         </div>
         <div class="mb-4">
@@ -97,7 +74,7 @@
         <input type="submit" value="Masuk" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
         <div class="d-flex align-items-center justify-content-center">
             <p class="fs-4 mb-0 fw-bold">Sudah punya akun?</p>
-            <a class="text-primary fw-bold ms-2" href="/">Masuk</a>
+            <a class="text-primary fw-bold ms-2" href="/masuk">Masuk</a>
         </div>
     </form>
 @endsection

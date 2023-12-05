@@ -84,14 +84,11 @@
                     <div class="card-body p-4">
                         <h5 class="card-title fw-semibold mb-4">Transaksi Terakhir</h5>
                         <div class="table-responsive">
-                            <table class="table text-nowrap mb-0 align-middle">
+                            <table id="table" class="table text-nowrap mb-0 align-middle">
                                 <thead class="text-dark fs-4">
                                     <tr>
                                         <th class="border-bottom-0">
                                             <h6 class="fw-semibold mb-0">Invoice</h6>
-                                        </th>
-                                        <th class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0">Nama Customer</h6>
                                         </th>
                                         <th class="border-bottom-0">
                                             <h6 class="fw-semibold mb-0">Metode Pembayaran</h6>
@@ -100,7 +97,10 @@
                                             <h6 class="fw-semibold mb-0">Harga</h6>
                                         </th>
                                         <th class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0">Status</h6>
+                                            <h6 class="fw-semibold mb-0">Status Pembayaran</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Status Pengerjaan</h6>
                                         </th>
                                         <th class="border-bottom-0">
                                             <h6 class="fw-semibold mb-0">Tanggal</h6>
@@ -112,9 +112,6 @@
                                         <tr>
                                             <td class="border-bottom-0">
                                                 <h6 class="fw-semibold mb-0">#{{ $order->order_invoice }}</h6>
-                                            </td>
-                                            <td class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-0">{{ $order->customer->customer_name }}</h6>
                                             </td>
                                             <td class="border-bottom-0">
                                                 @if ($order->order_payment_method == 'tunai')
@@ -137,26 +134,35 @@
                                                     <p class="mb-0 fw-normal">{{ rupiah($order->order_price) }}</p>
                                                 @endif
                                             </td>
-                                            <td class="border-bottom-0">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    @if ($order->order_status == 'ordered')
-                                                        @if ($order->order_price == 0 or $order->order_payment_method == 'tunai')
-                                                            <span
-                                                                class="badge bg-primary rounded-3 fw-semibold">Diproses</span>
-                                                        @else
-                                                            <span
-                                                                class="badge bg-primary rounded-3 fw-semibold">Dipesan</span>
-                                                        @endif
-                                                    @elseif($order->order_status == 'fail_pay')
+                                            <td class="border-bottom-0 text-center">
+                                                <div class="">
+                                                    @if ($order->order_status_payment == 'ordered')
+                                                        <span class="badge bg-primary rounded-3 fw-semibold">Dipesan</span>
+                                                    @elseif($order->order_status_payment == 'fail_pay')
                                                         <span class="badge bg-danger rounded-3 fw-semibold">Gagal
                                                             Dibayar</span>
-                                                    @elseif($order->order_status == 'payed')
+                                                    @elseif($order->order_status_payment == 'payed')
                                                         <span class="badge bg-info rounded-3 fw-semibold">Dibayar</span>
-                                                    @elseif($order->order_status == 'failed')
+                                                    @elseif($order->order_status_payment == 'refunded')
                                                         <span class="badge bg-danger rounded-3 fw-semibold">Gagal
                                                             Diproses</span>
-                                                    @elseif($order->order_status == 'done')
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="border-bottom-0 text-center">
+                                                <div class="">
+                                                    @if ($order->order_status_job == 'not_start')
+                                                        <span class="badge bg-dark rounded-3 fw-semibold">Belum Dimulai</span>
+                                                    @elseif($order->order_status_job == 'on_queue')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Dalam Antrian</span>
+                                                    @elseif($order->order_status_job == 'on_the_way')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang Dijalan</span>
+                                                    @elseif($order->order_status_job == 'on_process')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang Dikerjakan</span>
+                                                    @elseif($order->order_status_job == 'done')
                                                         <span class="badge bg-success rounded-3 fw-semibold">Selesai</span>
+                                                    @elseif($order->order_status_job == 'rejected')
+                                                        <span class="badge bg-danger rounded-3 fw-semibold">Ditolak</span>
                                                     @endif
                                                 </div>
                                             </td>

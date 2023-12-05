@@ -56,7 +56,10 @@
                                             <h6 class="fw-semibold mb-0">Harga</h6>
                                         </th>
                                         <th class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0">Status</h6>
+                                            <h6 class="fw-semibold mb-0">Status Pembayaran</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Status Pengerjaan</h6>
                                         </th>
                                         <th class="border-bottom-0">
                                             <h6 class="fw-semibold mb-0">Tanggal</h6>
@@ -93,26 +96,39 @@
                                                     <p class="mb-0 fw-normal">{{ rupiah($order->order_price) }}</p>
                                                 @endif
                                             </td>
-                                            <td class="border-bottom-0">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    @if ($order->order_status == 'ordered')
-                                                        @if ($order->order_price == 0 or $order->order_payment_method == 'tunai')
-                                                            <span
-                                                                class="badge bg-primary rounded-3 fw-semibold">Diproses</span>
-                                                        @else
-                                                            <span
-                                                                class="badge bg-primary rounded-3 fw-semibold">Dipesan</span>
-                                                        @endif
-                                                    @elseif($order->order_status == 'fail_pay')
+                                            <td class="border-bottom-0 text-center">
+                                                <div class="">
+                                                    @if ($order->order_status_payment == 'ordered')
+                                                        <span class="badge bg-primary rounded-3 fw-semibold">Dipesan</span>
+                                                    @elseif($order->order_status_payment == 'fail_pay')
                                                         <span class="badge bg-danger rounded-3 fw-semibold">Gagal
                                                             Dibayar</span>
-                                                    @elseif($order->order_status == 'payed')
+                                                    @elseif($order->order_status_payment == 'payed')
                                                         <span class="badge bg-info rounded-3 fw-semibold">Dibayar</span>
-                                                    @elseif($order->order_status == 'failed')
+                                                    @elseif($order->order_status_payment == 'refunded')
                                                         <span class="badge bg-danger rounded-3 fw-semibold">Gagal
                                                             Diproses</span>
-                                                    @elseif($order->order_status == 'done')
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="border-bottom-0 text-center">
+                                                <div class="">
+                                                    @if ($order->order_status_job == 'not_start')
+                                                        <span class="badge bg-dark rounded-3 fw-semibold">Belum
+                                                            Dimulai</span>
+                                                    @elseif($order->order_status_job == 'on_queue')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Dalam
+                                                            Antrian</span>
+                                                    @elseif($order->order_status_job == 'on_the_way')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang
+                                                            Dijalan</span>
+                                                    @elseif($order->order_status_job == 'on_process')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang
+                                                            Dikerjakan</span>
+                                                    @elseif($order->order_status_job == 'done')
                                                         <span class="badge bg-success rounded-3 fw-semibold">Selesai</span>
+                                                    @elseif($order->order_status_job == 'rejected')
+                                                        <span class="badge bg-danger rounded-3 fw-semibold">Ditolak</span>
                                                     @endif
                                                 </div>
                                             </td>
@@ -121,29 +137,20 @@
                                                     {{ date_format(date_create($order->order_date), 'd M Y') }}</h6>
                                             </td>
                                             <td class="border-bottom-0">
-                                                @if ($order->order_status == 'ordered')
-                                                    @if ($order->order_price == 0 or $order->order_payment_method == 'tunai')
-                                                        <p class="mb-0 fw-normal text-center">Petugas kami akan mendatangi
-                                                            lokasi anda</p>
-                                                    @else
-                                                        @if ($order->channel_id == null)
-                                                            <button class="btn btn-primary" data-bs-toggle="modal"
-                                                                data-bs-target="#paymentModal{{$order->order_id}}">Bayar</button>
-                                                        @else
-                                                            <a href="{{ $order->payment_url }}"
-                                                                class="btn btn-primary">Bayar</a>
-                                                        @endif
+                                                <button class="btn btn-info" data-bs-toggle="modal"
+                                                    data-bs-target="#detailModal{{ $order->order_id }}">Detail</button>
+                                                @if ($order->order_status_payment == 'ordered')
+                                                    @if ($order->order_payment_method == 'non_tunai' && $order->channel_id == null)
+                                                        <button class="btn btn-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#paymentModal{{ $order->order_id }}">Bayar</button>
+                                                    @elseif($order->channel_id != null)
+                                                        <a href="{{ $order->payment_url }}"
+                                                            class="btn btn-primary">Bayar</a>
                                                     @endif
-                                                @elseif($order->order_status == 'fail_pay')
-                                                    <p class="mb-0 fw-normal text-center">Gagal melakukan pembayaran,
-                                                        silakan hubungi petugas</p>
-                                                @elseif($order->order_status == 'payed')
-                                                    <p class="mb-0 fw-normal text-center">-</p>
-                                                @elseif($order->order_status == 'failed')
-                                                    <p class="mb-0 fw-normal text-center">Gagal melakukan pengajuan, silakan
-                                                        hubungi petugas</p>
-                                                @elseif($order->order_status == 'done')
-                                                    <p class="mb-0 fw-normal text-center">-</p>
+                                                @endif
+                                                @if ($order->order_status_job == 'on_process')
+                                                    <button class="btn btn-success" data-bs-toggle="modal"
+                                                        data-bs-target="#doneModal{{ $order->order_id }}">Selesai</button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -176,6 +183,30 @@
                             </select>
                             <hr class="mt-3 mb-3">
                             <p>
+                                <b>Pilih Sepithank</b>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="multiSelectDropdown"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Sepithank Saya
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="multiSelectDropdown">
+                                    @foreach ($sepithanks as $sepithank)
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="sepithank[]" required
+                                                    value="{{ $sepithank->sepithank_id }}"
+                                                    label="{{ $sepithank->sepithank_vol }} {{ $sepithank->sepithank_unit }}">
+                                                {{ $sepithank->sepithank_vol }} {{ $sepithank->sepithank_unit }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <div id="msg" class="form-text text-danger"></div>
+                                <p class="text-center fw-bolder" id="price">Biaya yang harus anda bayar: Rp. 0.00</p>
+                            </div>
+                            </p>
+                            <hr class="mt-3 mb-3">
+                            <p>
                                 <b>Apakah data anda telah benar?</b>
                             </p>
                             <p>
@@ -189,7 +220,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                            <button type="submit" class="btn btn-primary">Ajukan</button>
+                            <button type="submit" class="btn btn-primary" onclick="cekSepitank()">Ajukan</button>
                         </div>
                     </form>
                 </div>
@@ -197,9 +228,40 @@
         </div>
 
         @foreach ($orders as $order)
+            <div class="modal fade" id="detailModal{{ $order->order_id }}" tabindex="-1"
+                aria-labelledby="detailModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="detailModalLabel">Detail Pesanan</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>Volume</td>
+                                    <td>Unit</td>
+                                    <td>Harga</td>
+                                </tr>
+                                @foreach ($order->detailOrderSepithank as $detail)
+                                    <tr>
+                                        <td>{{ $detail->sepithank->sepithank_vol }}</td>
+                                        <td>{{ $detail->sepithank->sepithank_unit }}</td>
+                                        <td>{{ rupiah($detail->price) }}</td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @if ($order->order_payment_method == 'non_tunai' && $order->channel_id == null)
-                <div class="modal fade" id="paymentModal{{$order->order_id}}" tabindex="-1" aria-labelledby="paymentModalLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="paymentModal{{ $order->order_id }}" tabindex="-1"
+                    aria-labelledby="paymentModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -276,6 +338,26 @@
                     </div>
                 </div>
             @endif
+            <div class="modal fade" id="doneModal{{ $order->order_id }}" tabindex="-1"
+                aria-labelledby="doneModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="doneModalLabel">Selesaikan Pesanan</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Anda yakin ingin menyelesaikan permintaan invoice #{{ $order->order_invoice }}?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <a href="/selesaikan-permintaan/{{ $order->order_id }}"
+                                class="btn btn-success">Selesai</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endforeach
     </div>
 @endsection
@@ -285,6 +367,75 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+    <script>
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        function cekSepitank() {
+            let q = document.querySelectorAll('.dropdown-menu input[type="checkbox"]:checked').length;
+            if (q == 0) {
+                document.getElementById('msg').innerHTML = 'Silakan pilih Sepitank terlebih dahulu!';
+            }
+        }
+
+        const chBoxes =
+            document.querySelectorAll('.dropdown-menu input[type="checkbox"]');
+        const dpBtn =
+            document.getElementById('multiSelectDropdown');
+        let mySelectedListItems = [];
+
+        function handleCB() {
+            let q = document.querySelectorAll('.dropdown-menu input[type="checkbox"]:checked').length;
+
+            document.getElementById('price').innerHTML = 'Biaya yang harus anda bayar: Rp. ' + formatRupiah(Math.round(
+                300000 * q).toString()) + ",00";
+
+            mySelectedListItems = [];
+            let mySelectedListItemsText = '';
+
+            chBoxes.forEach((check) => {
+                check.setAttribute('required', 'required');
+            })
+            chBoxes.forEach((checkbox) => {
+                if (checkbox.checked) {
+                    mySelectedListItems.push(checkbox.value);
+                    mySelectedListItemsText += checkbox.getAttribute('label') + ', ';
+                    document.getElementById('msg').innerHTML = '';
+                } else {
+                    const checked =
+                        document.querySelectorAll('.dropdown-menu input[type="checkbox"]:checked').length;
+                    if (checked != 0) {
+                        checkbox.removeAttribute('required');
+                    }
+
+                }
+            });
+
+            dpBtn.innerText =
+                mySelectedListItems.length > 0 ?
+                mySelectedListItemsText.slice(0, -2) : 'Sepithank Saya';
+
+
+        }
+
+        chBoxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', handleCB);
+        });
+    </script>
 
     <script>
         new DataTable('#table', {

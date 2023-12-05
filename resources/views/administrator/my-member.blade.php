@@ -56,9 +56,6 @@
                                             <h6 class="fw-semibold mb-0">Kecamatan</h6>
                                         </th>
                                         <th class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0">Kapasitas</h6>
-                                        </th>
-                                        <th class="border-bottom-0">
                                             <h6 class="fw-semibold mb-0">Nomenklatur</h6>
                                         </th>
                                         <th class="border-bottom-0">
@@ -92,10 +89,6 @@
                                                 <h6 class="mb-0">{{ $customer->customer_urban_village }}</h6>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <h6 class="mb-0">{{ $customer->customer_vol }}
-                                                    {{ $customer->customer_unit }}</h6>
-                                            </td>
-                                            <td class="border-bottom-0">
                                                 <h6 class="mb-0">{{ $customer->customer_nomenklatur }}</h6>
                                             </td>
                                             <td class="border-bottom-0">
@@ -105,6 +98,10 @@
                                                         {{ $customer->customer_long }}</a></h6>
                                             </td>
                                             <td class="border-bottom-0">
+                                                <button class="btn btn-info" data-bs-toggle="modal"
+                                                    data-bs-target="#detailModal{{ $customer->customer_id }}">
+                                                    <i class="ti ti-edit"></i> Detail
+                                                </button>
                                                 <button class="btn btn-warning" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $customer->customer_id }}">
                                                     <i class="ti ti-edit"></i> Edit
@@ -125,6 +122,36 @@
         </div>
 
         @foreach ($customers as $customer)
+        
+        <div class="modal fade" id="detailModal{{ $customer->customer_id }}" tabindex="-1"
+            aria-labelledby="detailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="detailModalLabel">List Sepithank</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Volume</td>
+                                <td>Unit</td>
+                            </tr>
+                            @foreach ($customer->sepithank as $sepithank)
+                                <tr>
+                                    <td>{{ $sepithank->sepithank_vol }}</td>
+                                    <td>{{ $sepithank->sepithank_unit }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="modal fade" id="editModal{{ $customer->customer_id }}" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">

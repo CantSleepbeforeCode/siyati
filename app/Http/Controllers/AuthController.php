@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\Sepithank;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +33,10 @@ class AuthController extends Controller
         });
     }
 
+    public function portal() {
+        return view('portal');
+    }
+
     public function login(Request $request)
     {
         if ($request->method() == 'GET') {
@@ -43,6 +50,9 @@ class AuthController extends Controller
                 } elseif ($user->level == 'customer') {
                     Auth::login($user);
                     return redirect('/beranda');
+                } elseif($user->level == 'armada') {
+                    Auth::login($user);
+                    return redirect('/armada/beranda');
                 } else {
                     return back()->with('error', 'Akun anda tidak dapat diidentifikasi, silahkan hubungi Admin!');
                 }
@@ -55,7 +65,9 @@ class AuthController extends Controller
     public function signUp(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('auth.register');
+            $kecamatans = Kecamatan::all();
+            $kelurahans = Kelurahan::all();
+            return view('auth.register', ['kecamatans' => $kecamatans, 'kelurahans' => $kelurahans]);
         } else if ($request->method() == 'POST') {
             $user = User::where('nik', $request->nik)->first();
             if ($user != null) {
@@ -75,8 +87,6 @@ class AuthController extends Controller
             $customer->customer_address = $request->customer_address;
             $customer->customer_subdistrict = $request->customer_subdistrict;
             $customer->customer_urban_village = $request->customer_urban_village;
-            $customer->customer_vol = $request->customer_vol;
-            $customer->customer_unit = $request->customer_unit;
             $customer->customer_nomenklatur = $request->customer_nomenklatur;
 
             $toPhoto = '/image';
@@ -85,6 +95,7 @@ class AuthController extends Controller
                 $namePhoto1 = time() . "_" . strtolower(str_replace(" ", "_", $request->nik)) . ".jpg";
 
                 if ($image1->getSize() > $this->maxSize) {
+                    $newUser->delete();
                     return redirect()->back()->with('failed', 'Ukuran foto terlalu besar!');
                 }
 
@@ -95,6 +106,12 @@ class AuthController extends Controller
 
             $customer->save();
 
+            $sepithank = new Sepithank();
+            $sepithank->customer_id = $customer->customer_id;
+            $sepithank->sepithank_vol = $request->customer_vol;
+            $sepithank->sepithank_unit = $request->customer_unit;
+            $sepithank->save();
+            
             Auth::login($newUser);
             return redirect('/beranda');
         }
@@ -105,8 +122,6 @@ class AuthController extends Controller
         $customer->customer_address = $request->customer_address;
         $customer->customer_subdistrict = $request->customer_subdistrict;
         $customer->customer_urban_village = $request->customer_urban_village;
-        $customer->customer_vol = $request->customer_vol;
-        $customer->customer_unit = $request->customer_unit;
 
         
         if ($request->has('customer_photo')) {

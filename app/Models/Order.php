@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -17,17 +18,20 @@ class Order extends Model
     protected $fillable = [
         'customer_id',
         'channel_id',
+        'armada_id',
         'order_invoice',
         'order_lat',
         'order_long',
         'order_price',
-        'order_status',
+        'order_status_payment',
+        'order_status_job',
         'order_date',
         'order_payment_method',
         'payment_invoice',
         'payment_expired',
         'payment_url',
         'payment_message',
+        'order_proof_photo',
     ];
 
     public function tripay_channel(): BelongsTo
@@ -37,5 +41,9 @@ class Order extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function detailOrderSepithank(): HasMany {
+        return $this->hasMany(DetailOrderSepithank::class, 'order_id');
     }
 }

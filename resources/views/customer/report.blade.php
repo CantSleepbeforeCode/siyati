@@ -54,10 +54,10 @@
                                     @foreach ($orders as $order)
                                         <tr>
                                             <td class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-0">{{ date_format(date_create($order->order_date), 'F Y') }}</h6>
+                                                <h6 class="fw-semibold mb-0">{{ $order->day }}</h6>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-0">{{ rupiah($order->order_price) }}</h6>
+                                                <h6 class="fw-semibold mb-0">{{ rupiah($order->sum_price) }}</h6>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -78,7 +78,8 @@
 
     <script>
         new DataTable('#table', {
-            responsive: true
+            responsive: true,
+            ordering: false
         });
     </script>
     @endsection

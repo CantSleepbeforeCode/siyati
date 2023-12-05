@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Armada;
 use App\Models\Customer;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
 class AdministratorController extends Controller
 {
+    private $maxSize = 1048576;
     protected $apiController;
     public function __construct(ApiController $apiController)
     {
@@ -23,7 +28,7 @@ class AdministratorController extends Controller
             }
 
             if (Auth::user()->level != 'administrator') {
-                Redirect::to("/logout")->send();
+                Redirect::to("/keluar")->send();
             }
 
             return $next($request);
@@ -31,10 +36,10 @@ class AdministratorController extends Controller
     }
 
     public function home() {
-        $orderOrdered = Order::where('order_status', 'ordered')->count();
-        $orderProcess = Order::where('order_status', 'process')->count();
-        $orderFailed = Order::where('order_status', 'failed')->count();
-        $orderDone = Order::where('order_status', 'done')->count();
+        $orderOrdered = Order::whereIn('order_status_job', ['not_start', 'on_queue'])->count();
+        $orderProcess = Order::whereIn('order_status_job', ['on_the_way', 'on_process'])->count();
+        $orderFailed = Order::where('order_status_job', 'rejected')->count();
+        $orderDone = Order::where('order_status_job', 'done')->count();
         $orders = Order::with(['tripay_channel', 'customer'])->get();
 
         $query = '';
@@ -55,17 +60,133 @@ class AdministratorController extends Controller
         return view('administrator.home', ['orderOrdered' => $orderOrdered, 'orderProcess' => $orderProcess, 'orderFailed' => $orderFailed, 'orderDone' => $orderDone, 'dailyOrders' => $dailyOrders, 'orders' => $orders]);
     }
 
+    public function masterData() {
+        $kecamatans = Kecamatan::all();
+        $kelurahans = Kelurahan::with('kecamatan')->get();
+        return view('administrator.master-data', ['kecamatans' => $kecamatans, 'kelurahans' => $kelurahans,]);
+    }
+
     public function member() {
-        $customers = Customer::with('user')->get();
+        $customers = Customer::with(['user', 'sepithank'])->get();
         return view('administrator.my-member', ['customers' => $customers]);
     }
 
     public function armada() {
-        return view('administrator.my-armada');
+        $lastArmada = Armada::orderBy('armada_id', 'desc')->first();
+        $index = 0;
+        if ($lastArmada != null) {
+            $index = (int)substr($lastArmada->armada_id, 5);
+        }
+        $newIdArmada = 'AMD' . sprintf('%0' . 10 . 's', $index + 1);
+        
+        $armadas = Armada::with('kecamatan')->get();
+        $kecamatans = Kecamatan::all();
+        return view('administrator.my-armada', ['armadas' => $armadas, 'kecamatans' => $kecamatans, 'newIdArmada' => $newIdArmada]);
+    }
+
+    public function addArmada(Request $request) {
+        $user = new User();
+        $user->nik = $request->armada_id;
+        $user->password = Hash::make($request->password);
+        $user->level = 'armada';
+        $user->save();
+
+        $armada = new Armada();
+        $armada->armada_id = $request->armada_id;
+        $armada->user_id = $user->user_id;
+        $armada->armada_driver = $request->armada_driver;
+        $armada->armada_plat = $request->armada_plat;
+        $armada->armada_id_gps = $request->armada_id_gps;
+        $armada->armada_subdistinct = $request->armada_subdistinct;
+
+        $toPhoto = '/image';
+        if ($request->has('armada_driver_photo')) {
+            $image1 = $request->file('armada_driver_photo');
+            $namePhoto1 = time() . "_" . strtolower(str_replace(" ", "_", $request->nik)) . ".jpg";
+
+            if ($image1->getSize() > $this->maxSize) {
+                $user->delete();
+                return redirect()->back()->with('failed', 'Ukuran foto terlalu besar!');
+            }
+
+            $image1->move(public_path($toPhoto), $namePhoto1);
+
+            $armada->armada_driver_photo = $toPhoto . '/' . $namePhoto1;
+        }
+
+        $armada->save();
+        return redirect()->back()->with('success', 'Berhasil menambah data armada!');
+    }
+
+    public function editArmada(Request $request) {
+        $armada = Armada::find($request->armada_id);
+        $armada->armada_driver = $request->armada_driver;
+        $armada->armada_plat = $request->armada_plat;
+        $armada->armada_id_gps = $request->armada_id_gps;
+        $armada->armada_subdistinct = $request->armada_subdistinct;
+
+        $toPhoto = '/image';
+        if ($request->has('armada_driver_photo')) {
+            $image1 = $request->file('armada_driver_photo');
+            $namePhoto1 = time() . "_" . strtolower(str_replace(" ", "_", $request->nik)) . ".jpg";
+
+            if ($image1->getSize() > $this->maxSize) {
+                return redirect()->back()->with('failed', 'Ukuran foto terlalu besar!');
+            }
+
+            File::delete(public_path($armada->armada_driver_photo));
+
+            $image1->move(public_path($toPhoto), $namePhoto1);
+
+            $armada->armada_driver_photo = $toPhoto . '/' . $namePhoto1;
+        }
+
+        $armada->save();
+
+        if($request->password != null) {
+            $user = User::where('nik', $armada->armada_id)->first();
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
+        return redirect()->back()->with('success', 'Berhasil mengubah data armada!');
+    }
+
+    public function deleteArmada($id) {
+        $user = User::where('nik', $id)->first();
+        $armada = Armada::find($id);
+        
+        File::delete(public_path($armada->armada_driver_photo));
+        $armada->delete();
+        $user->delete();
+        return redirect()->back()->with('error', 'Berhasil menghapus data armada!');
     }
 
     public function transaction() {
-        return view('administrator.my-transaksi');
+        $armadas = Armada::all();
+        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer'])->orderBy('order_id', 'desc')->get();
+        return view('administrator.my-transaksi', ['orders' => $orders, 'armadas' => $armadas]);
+    }
+
+    public function pickArmada(Request $request) {
+        $order = Order::find($request->order);
+        $order->armada_id = $request->armada_id;
+        $order->order_status_job = 'on_queue';
+        $order->save();
+        return redirect()->back()->with('success', 'Berhasil memilih armada!');
+    }
+
+    public function rejectOrder($id) {
+        $order = Order::find($id);
+        $order->order_status_job = 'rejected';
+        $order->save();
+        return redirect()->back()->with('error', 'Berhasil menolak permintaan!');
+    }
+
+    public function doneOrder($id) {
+        $order = Order::find($id);
+        $order->order_status_job = 'done';
+        $order->save();
+        return redirect()->back()->with('success', 'Berhasil menyelesaikan permintaan!');
     }
 
     public function gps() {
@@ -103,7 +224,7 @@ class AdministratorController extends Controller
 
     public function exportMember() {
         
-        $query = "SELECT b.nik, a.* FROM customers a inner join users b on a.user_id = b.user_id";
+        $query = "SELECT b.nik, a.*, c.* FROM customers a inner join users b on a.user_id = b.user_id inner join sepithanks c on a.customer_id = c.customer_id";
 
         $datas = DB::select($query);
         $nameCsv = "data_customer_" . uniqid() . ".csv";
@@ -128,7 +249,7 @@ class AdministratorController extends Controller
 
 
             foreach ($datas as $data) {
-                fputcsv($file, array($data->nik, $data->customer_name, $data->customer_phone, $data->customer_address, $data->customer_subdistrict, $data->customer_urban_village, $data->customer_vol, $data->customer_unit, $data->customer_nomenklatur, $data->customer_lat, $data->customer_long));
+                fputcsv($file, array($data->nik, $data->customer_name, $data->customer_phone, $data->customer_address, $data->customer_subdistrict, $data->customer_urban_village, $data->sepithank_vol, $data->sepithank_unit, $data->customer_nomenklatur, $data->customer_lat, $data->customer_long));
             }
 
             fclose($file);
@@ -143,6 +264,61 @@ class AdministratorController extends Controller
         );
 
         return response()->stream($callback, 200, $headersPHP);
+
+    }
+
+    public function addKecamatan(Request $request) {
+        $kecamatan = new Kecamatan();
+        $kecamatan->kecamatan_id = $request->kecamatan_id;
+        $kecamatan->nama = $request->nama;
+        $kecamatan->save();
+        return redirect()->back()->with('success', 'Berhasil menambah data kecamatan!');
+    }
+
+    public function addKelurahan(Request $request) {
+        $kelurahan = new Kelurahan();
+        $kelurahan->kelurahan_id = $request->kelurahan_id;
+        $kelurahan->kecamatan_id = $request->kecamatan_id;
+        $kelurahan->nama = $request->nama;
+        $kelurahan->save();
+        return redirect()->back()->with('success', 'Berhasil menambah data kelurahan!');
+    }
+
+    public function editKecamatan(Request $request) {
+        $kecamatan = Kecamatan::find($request->kecamatan);
+        $kecamatan->kecamatan_id = $request->kecamatan_id;
+        $kecamatan->nama = $request->nama;
+        $kecamatan->save();
+        return redirect()->back()->with('success', 'Berhasil mengubah data kecamatan!');
+    }
+
+    public function editKelurahan(Request $request) {
+        $kelurahan = Kelurahan::find($request->kelurahan);
+        $kelurahan->kelurahan_id = $request->kelurahan_id;
+        $kelurahan->kecamatan_id = $request->kecamatan_id;
+        $kelurahan->nama = $request->nama;
+        $kelurahan->save();
+        return redirect()->back()->with('success', 'Berhasil menambah data kelurahan!');
+
+    }
+    
+    public function deleteKecamatan($id) {
+        $kelurahan = Kelurahan::where('kecamatan_id', $id)->get();
+        foreach($kelurahan as $k) {
+            $k->delete();
+        }
+        $kelurahan = Kecamatan::find($id);
+        $kelurahan->delete();
+
+        return redirect()->back()->with('error', 'Berhasil menghapus data kecamatan!');
+
+    }
+    
+    public function deleteKelurahan($id) {
+        $kelurahan = Kelurahan::find($id);
+        $kelurahan->delete();
+
+        return redirect()->back()->with('error', 'Berhasil menghapus data kelurahan!');
 
     }
 }

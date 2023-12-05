@@ -31,4 +31,8 @@ class User extends Authenticatable
     public function customer(): HasMany {
         return $this->hasMany(Customer::class, 'user_id');
     }
+
+    public function armada(): HasMany {
+        return $this->hasMany(Armada::class, 'user_id');
+    }
 }
