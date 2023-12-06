@@ -191,7 +191,7 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="multiSelectDropdown">
                                     @foreach ($sepithanks as $sepithank)
-                                        <li>
+                                        <li class="text-center">
                                             <label>
                                                 <input type="checkbox" name="sepithank[]" required
                                                     value="{{ $sepithank->sepithank_id }}"
