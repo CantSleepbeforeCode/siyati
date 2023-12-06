@@ -41,6 +41,9 @@ class ArmadaController extends Controller
     public function doTheWork($id) {
         $order = Order::find($id);
         $order->order_status_job = 'on_process';
+        if($order->order_payment_method == 'tunai') {
+            $order->order_status_payment = 'payed';
+        }
         $order->save();
         return redirect()->back()->with('success', 'Status telah berubah. Semangat bekerja!');
     }

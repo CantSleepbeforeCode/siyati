@@ -67,8 +67,10 @@ class AdministratorController extends Controller
     }
 
     public function member() {
+        $kecamatans = Kecamatan::all();
+        $kelurahans = Kelurahan::all();
         $customers = Customer::with(['user', 'sepithank'])->get();
-        return view('administrator.my-member', ['customers' => $customers]);
+        return view('administrator.my-member', ['customers' => $customers, 'kecamatans' => $kecamatans, 'kelurahans' => $kelurahans]);
     }
 
     public function armada() {
@@ -153,7 +155,8 @@ class AdministratorController extends Controller
     }
 
     public function deleteArmada($id) {
-        $user = User::where('nik', $id)->first();
+        $armada = Armada::find($id);
+        $user = User::find($armada->user_id);
         $armada = Armada::find($id);
         
         File::delete(public_path($armada->armada_driver_photo));
@@ -206,8 +209,6 @@ class AdministratorController extends Controller
         $customer->customer_nomenklatur = $request->customer_nomenklatur;
         $customer->customer_subdistrict = $request->customer_subdistrict;
         $customer->customer_urban_village = $request->customer_urban_village;
-        $customer->customer_vol = $request->customer_vol;
-        $customer->customer_unit = $request->customer_unit;
         $customer->save();
 
         return redirect()->back()->with('success', 'Berhasil mengubah data member!');
@@ -218,6 +219,13 @@ class AdministratorController extends Controller
         $customer = Customer::find($id);
         $user = User::find($customer->user_id);
         File::delete(public_path($customer->customer_photo));
+
+        $orders = Order::where('customer_id', $id)->get();
+        
+        foreach($orders as $order) {
+            $order->delete();
+        }
+
         $customer->delete();
         $user->delete();
         return redirect()->back()->with('failed', 'Berhasil menghapus data member!');

@@ -1,10 +1,10 @@
-@php
+{{-- @php
     function rupiah($angka)
     {
         $hasil_rupiah = 'Rp' . number_format($angka, 0, ',', '.');
         return $hasil_rupiah;
     }
-@endphp
+@endphp --}}
 
 @extends('base.administrator')
 
@@ -92,7 +92,7 @@
                                                 @if ($order->order_price == 0)
                                                     <p class="mb-0 fw-normal text-center">-</p>
                                                 @else
-                                                    <p class="mb-0 fw-normal">{{ rupiah($order->order_price) }}</p>
+                                                    {{-- <p class="mb-0 fw-normal">{{ rupiah($order->order_price) }}</p> --}}
                                                 @endif
                                             </td>
                                             <td class="border-bottom-0 text-center">
@@ -196,7 +196,7 @@
                                     <tr>
                                         <td>{{ $detail->sepithank->sepithank_vol }}</td>
                                         <td>{{ $detail->sepithank->sepithank_unit }}</td>
-                                        <td>{{ rupiah($detail->price) }}</td>
+                                        {{-- <td>{{ rupiah($detail->price) }}</td> --}}
                                     </tr>
                                 @endforeach
                             </table>
@@ -210,7 +210,7 @@
                                 </div>
                             @endif
 
-                            @if($order->armada != null)
+                            @if($order->customer != null)
                             <hr class="mt-4 mb-2">
                             <p>Data Customer</p>
                             <div class="row">
