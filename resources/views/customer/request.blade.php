@@ -183,11 +183,11 @@
                             </select>
                             <hr class="mt-3 mb-3">
                             <p>
-                                <b>Pilih Sepithank</b>
+                                <b>Pilih Septic Tank</b>
                             <div class="dropdown">
                                 <button class="btn btn-primary dropdown-toggle" type="button" id="multiSelectDropdown"
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                    Sepithank Saya
+                                    Septic Tank Saya
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="multiSelectDropdown">
                                     @foreach ($sepithanks as $sepithank)
@@ -427,7 +427,7 @@
 
             dpBtn.innerText =
                 mySelectedListItems.length > 0 ?
-                mySelectedListItemsText.slice(0, -2) : 'Sepithank Saya';
+                mySelectedListItemsText.slice(0, -2) : 'Septic Tank Saya';
 
 
         }

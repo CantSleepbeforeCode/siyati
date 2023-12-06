@@ -79,7 +79,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Sepithank</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Septic Tank</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/tambah-sepithank" method="POST">
@@ -87,7 +87,7 @@
                         <div class="modal-body">
                             <div class="row mb-3">
                                 <div class="col-9">
-                                    <label for="" class="form-label">Vol Kapasitas Sepithank / M3</label>
+                                    <label for="" class="form-label">Vol Kapasitas Septic Tank / M3</label>
                                     <input type="number" class="form-control" id="" required name="sepithank_vol">
                                 </div>
                                 <div class="col">
@@ -120,7 +120,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Ubah Sepithank</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Ubah Septic Tank</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form action="/edit-sepithank" method="POST">
@@ -129,7 +129,7 @@
                             <div class="modal-body">
                                 <div class="row mb-3">
                                     <div class="col-9">
-                                        <label for="" class="form-label">Vol Kapasitas Sepithank / M3</label>
+                                        <label for="" class="form-label">Vol Kapasitas Septic Tank / M3</label>
                                         <input type="number" class="form-control" id=""
                                             value={{ $sepithank->sepithank_vol }} required name="sepithank_vol">
                                     </div>
@@ -162,12 +162,12 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Sepithank</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Septic Tank</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Anda yakin ingin menghapus data Sepithank {{ $sepithank->sepithank_vol }}
+                            Anda yakin ingin menghapus data Septic Tank {{ $sepithank->sepithank_vol }}
                             {{ $sepithank->sepithank_unit }}?
                         </div>
                         <div class="modal-footer">

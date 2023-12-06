@@ -52,7 +52,7 @@
                                 <span>
                                     <i class="ti ti-box"></i>
                                 </span>
-                                <span class="hide-menu">Sepithank</span>
+                                <span class="hide-menu">Septic Tank</span>
                             </a>
                         </li>
                         <li class="sidebar-item">

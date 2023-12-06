@@ -24,7 +24,7 @@
     </style>
 </head>
 
-<body style="background-color: #f0f3fc;">
+<body style="background-color: #003399;">
     <div class="ms-3 me-3 text-center align-items-center my-auto row mh">
         <div class="">
             <img class="mb-5" src="{{ asset('image/web/palu.png') }}">
@@ -87,7 +87,7 @@
     </div>
     <div class="text-center mb-5">
         <span style="position:absolute; bottom: 15px; left: 0; right: 0;"><img src="{{ asset('image/web/dpu.jpg') }}"
-                width="50"> <span class="ms-2 fw-bold text-dark">Dinas Pekerjaan Umum Kota Palu</span></span>
+                width="50"> <span class="ms-2 fw-bold text-white">Dinas Pekerjaan Umum Kota Palu</span></span>
     </div>
 
     

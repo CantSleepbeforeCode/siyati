@@ -128,7 +128,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="detailModalLabel">List Sepithank</h1>
+                        <h1 class="modal-title fs-5" id="detailModalLabel">List Septic Tank</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -292,7 +292,7 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-9">
-                                        <label for="" class="form-label">Vol Kapasitas Sepithank / M3</label>
+                                        <label for="" class="form-label">Vol Kapasitas Septic Tank / M3</label>
                                         <input type="number" class="form-control" id=""
                                             value={{ $customer->customer_vol }} required name="customer_vol">
                                     </div>

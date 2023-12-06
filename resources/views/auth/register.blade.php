@@ -50,7 +50,7 @@
         </div>
         <div class="row mb-3">
             <div class="col-9">
-                <label for="" class="form-label">Vol Kapasitas Sepithank / M3</label>
+                <label for="" class="form-label">Vol Kapasitas Septic Tank / M3</label>
                 <input type="number" class="form-control" id="" required name="customer_vol">
             </div>
             <div class="col">
