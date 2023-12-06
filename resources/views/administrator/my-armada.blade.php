@@ -111,6 +111,10 @@
                                 <input type="text" value="{{$newIdArmada}}" class="form-control" id="" required readonly name="armada_id">
                             </div>
                             <div class="col-12 mb-3">
+                                <label for="" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="" required name="username">
+                            </div>
+                            <div class="col-12 mb-3">
                                 <label for="" class="form-label">Password</label>
                                 <input type="text" class="form-control" id="" required name="password">
                             </div>
@@ -199,6 +203,10 @@
                             <div class="col-12 mb-3">
                                 <label for="" class="form-label">Nomor Armada</label>
                                 <input type="text" value="{{$armada->armada_id}}" class="form-control" id="" required readonly name="armada_id">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="" class="form-label">Username</label>
+                                <input type="text" value="{{$armada->user->nik}}" class="form-control" id="" required name="username">
                             </div>
                             <div class="col-12 mb-3">
                                 <label for="" class="form-label">Password</label>

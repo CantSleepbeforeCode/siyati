@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Armada extends Model
 {
@@ -28,5 +29,9 @@ class Armada extends Model
     public function kecamatan(): BelongsTo
     {
         return $this->belongsTo(Kecamatan::class, 'armada_subdistinct');
+    }
+
+    public function order(): HasMany {
+        return $this->hasMany(Order::class, 'armada_id');
     }
 }

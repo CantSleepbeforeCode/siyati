@@ -46,4 +46,8 @@ class Order extends Model
     public function detailOrderSepithank(): HasMany {
         return $this->hasMany(DetailOrderSepithank::class, 'order_id');
     }
+
+    public function armada(): BelongsTo {
+        return $this->belongsTo(Armada::class, 'armada_id');
+    }
 }

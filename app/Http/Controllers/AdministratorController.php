@@ -79,14 +79,14 @@ class AdministratorController extends Controller
         }
         $newIdArmada = 'AMD' . sprintf('%0' . 10 . 's', $index + 1);
         
-        $armadas = Armada::with('kecamatan')->get();
+        $armadas = Armada::with('kecamatan', 'user')->get();
         $kecamatans = Kecamatan::all();
         return view('administrator.my-armada', ['armadas' => $armadas, 'kecamatans' => $kecamatans, 'newIdArmada' => $newIdArmada]);
     }
 
     public function addArmada(Request $request) {
         $user = new User();
-        $user->nik = $request->armada_id;
+        $user->nik = $request->username;
         $user->password = Hash::make($request->password);
         $user->level = 'armada';
         $user->save();
@@ -143,8 +143,9 @@ class AdministratorController extends Controller
 
         $armada->save();
 
+        $user = User::find($armada->user_id);
+        $user->nik = $request->username;
         if($request->password != null) {
-            $user = User::where('nik', $armada->armada_id)->first();
             $user->password = Hash::make($request->password);
             $user->save();
         }
@@ -163,7 +164,7 @@ class AdministratorController extends Controller
 
     public function transaction() {
         $armadas = Armada::all();
-        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer'])->orderBy('order_id', 'desc')->get();
+        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer', 'armada.kecamatan'])->orderBy('order_id', 'desc')->get();
         return view('administrator.my-transaksi', ['orders' => $orders, 'armadas' => $armadas]);
     }
 

@@ -3,7 +3,7 @@
 <form action="/masuk" method="POST">
     @csrf
     <div class="mb-3">
-        <label for="" class="form-label">NIK</label>
+        <label for="" class="form-label">NIK / Username</label>
         <input type="text" class="form-control" id="" required name="nik">
     </div>
     <div class="mb-4">
