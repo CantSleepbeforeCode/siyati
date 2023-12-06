@@ -153,9 +153,9 @@ class CustomerController extends Controller
         $query = '';
         for ($date = 1; $date <= 12; $date++) {
             if ($date == 12) {
-                $query .= "SELECT '" . $arrMonth[$date] . ' - ' . date('Y') . "' as day, case when sum(order_price) is null then 0 else sum(order_price) end as sum_price FROM orders WHERE month(order_date) = $date and year(order_date) = " . date('Y') . " and order_status_job = 'done'";
+                $query .= "SELECT '" . $arrMonth[$date] . ' - ' . date('Y') . "' as day, case when sum(order_price) is null then 0 else sum(order_price) end as sum_price FROM orders WHERE customer_id = $customer->customer_id and month(order_date) = $date and year(order_date) = " . date('Y') . " and order_status_job = 'done'";
             } else {
-                $query .= "SELECT '" . $arrMonth[$date] . ' - ' . date('Y') . "' as day, case when sum(order_price) is null then 0 else sum(order_price) end as sum_price FROM orders WHERE month(order_date) = $date and year(order_date) = " . date('Y') . " and order_status_job = 'done'
+                $query .= "SELECT '" . $arrMonth[$date] . ' - ' . date('Y') . "' as day, case when sum(order_price) is null then 0 else sum(order_price) end as sum_price FROM orders WHERE customer_id = $customer->customer_id and month(order_date) = $date and year(order_date) = " . date('Y') . " and order_status_job = 'done'
             
                 UNION ALL
                 
