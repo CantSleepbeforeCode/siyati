@@ -193,7 +193,7 @@
                                     @foreach ($sepithanks as $sepithank)
                                         <li class="text-center">
                                             <label>
-                                                <input type="checkbox" name="sepithank[]" required
+                                                <input class="form-check-input" type="checkbox" name="sepithank[]" required
                                                     value="{{ $sepithank->sepithank_id }}"
                                                     label="{{ $sepithank->sepithank_vol }} {{ $sepithank->sepithank_unit }}">
                                                 {{ $sepithank->sepithank_vol }} {{ $sepithank->sepithank_unit }}
