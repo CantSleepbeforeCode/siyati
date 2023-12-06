@@ -15,7 +15,7 @@
             <input type="text" class="form-control" id="" required name="customer_phone">
         </div>
         <div class="mb-3">
-            <label for="" class="form-label">Nomenklatur</label>
+            <label for="" class="form-label">Jenis Bangunan</label>
             <select required name="customer_nomenklatur" class="form-control">
                 <option value="PERKANTORAN">PERKANTORAN</option>
                 <option value="HOTEL">HOTEL</option>

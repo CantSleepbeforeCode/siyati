@@ -64,7 +64,7 @@
 
                         <div class="row mt-1">
                             <div class="col-5">
-                                Nomenklatur
+                                Jenis Bangunan
                             </div>
                             <div class="col-1">
                                 :
