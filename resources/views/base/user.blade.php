@@ -48,7 +48,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/sepithank" aria-expanded="false">
+                            <a class="sidebar-link" href="/septic-tank" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-box"></i>
                                 </span>

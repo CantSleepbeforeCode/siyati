@@ -27,7 +27,7 @@
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col">
-                                <h5 class="card-title fw-semibold mb-4">Sepithank Saya</h5>
+                                <h5 class="card-title fw-semibold mb-4">Septic Tank Saya</h5>
                             </div>
                             <div class="col">
                                 <button class="btn btn-primary float-end" data-bs-toggle="modal"

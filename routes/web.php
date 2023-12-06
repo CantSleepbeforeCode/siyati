@@ -35,7 +35,7 @@ Route::get('/permintaan', [CustomerController::class, 'request']);
 Route::get('/pembayaran', [CustomerController::class, 'payment']);
 Route::get('/laporan', [CustomerController::class, 'report']);
 Route::get('/e-card-siyati', [CustomerController::class, 'ecard']);
-Route::get('/sepithank', [CustomerController::class, 'sepithank']);
+Route::get('/septic-tank', [CustomerController::class, 'sepithank']);
 Route::get('/hapus-sepithank/{id}', [CustomerController::class, 'deleteSepithank']);
 Route::get('/selesaikan-permintaan/{id}', [CustomerController::class, 'doneOrder']);
 
