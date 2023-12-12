@@ -94,10 +94,10 @@ class AuthController extends Controller
                 $image1 = $request->file('customer_photo');
                 $namePhoto1 = time() . "_" . strtolower(str_replace(" ", "_", $request->nik)) . ".jpg";
 
-                if ($image1->getSize() > $this->maxSize) {
-                    $newUser->delete();
-                    return redirect()->back()->with('failed', 'Ukuran foto terlalu besar!');
-                }
+                // if ($image1->getSize() > $this->maxSize) {
+                //     $newUser->delete();
+                //     return redirect()->back()->with('error', 'Ukuran foto terlalu besar!');
+                // }
 
                 $image1->move(public_path($toPhoto), $namePhoto1);
 
