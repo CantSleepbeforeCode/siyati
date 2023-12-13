@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Armada;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,8 @@ class ArmadaController extends Controller
     }
 
     public function home() {
-        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer'])->where('armada_id', Auth::user()->nik)->whereIn('order_status_job', ['on_queue', 'on_the_way', 'on_process', 'done', 'rejected'])->orderBy('order_id', 'desc')->get();
+        $armada = Armada::where('user_id', Auth::id())->first();
+        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer'])->where('armada_id', $armada->armada_id)->whereIn('order_status_job', ['on_queue', 'on_the_way', 'on_process', 'done', 'rejected'])->orderBy('order_id', 'desc')->get();
         return view('armada.home', ['orders' => $orders]);
     }
 
