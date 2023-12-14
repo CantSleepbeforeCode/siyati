@@ -364,7 +364,7 @@ class AdministratorController extends Controller
 
     public function checkPayment($invoice)
     {
-        $order = Order::where('invoice', $invoice)->first();
+        $order = Order::where('order_invoice', $invoice)->first();
         $checkTransaction = $this->apiController->getTransactionTripay($order);
 
         switch ($checkTransaction->data->status) {
