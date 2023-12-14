@@ -196,7 +196,7 @@
                                     <tr>
                                         <td>{{ $detail->sepithank->sepithank_vol }}</td>
                                         <td>{{ $detail->sepithank->sepithank_unit }}</td>
-                                        {{-- <td>{{ rupiah($detail->price) }}</td> --}}
+                                        <td>{{ rupiah($detail->price / count($order->detailOrderSepithank)) }}</td>
                                     </tr>
                                 @endforeach
                             </table>
