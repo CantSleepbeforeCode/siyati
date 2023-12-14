@@ -176,6 +176,10 @@
                                         value="{{ $customer->customer_phone }}" required name="customer_phone">
                                 </div>
                                 <div class="mb-3">
+                                    <label for="" class="form-label">Password</label>
+                                    <input type="text" class="form-control" id="" name="password">
+                                </div>
+                                <div class="mb-3">
                                     <label for="" class="form-label">Alamat</label>
                                     <input type="text" class="form-control" id=""
                                         value="{{ $customer->customer_address }}" required name="customer_address">

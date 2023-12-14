@@ -6,6 +6,7 @@ use App\Models\Armada;
 use App\Models\Customer;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
+use App\Models\Nomenclature;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -57,13 +58,16 @@ class AdministratorController extends Controller
 
         $dailyOrders = DB::select($query);
 
-        return view('administrator.home', ['orderOrdered' => $orderOrdered, 'orderProcess' => $orderProcess, 'orderFailed' => $orderFailed, 'orderDone' => $orderDone, 'dailyOrders' => $dailyOrders, 'orders' => $orders]);
+        $buildings = DB::select("SELECT sum(customer_id) as total, customer_nomenklatur from customers group by 2");
+
+        return view('administrator.home', ['orderOrdered' => $orderOrdered, 'orderProcess' => $orderProcess, 'orderFailed' => $orderFailed, 'orderDone' => $orderDone, 'dailyOrders' => $dailyOrders, 'orders' => $orders, 'buildings' => $buildings]);
     }
 
     public function masterData() {
         $kecamatans = Kecamatan::all();
         $kelurahans = Kelurahan::with('kecamatan')->get();
-        return view('administrator.master-data', ['kecamatans' => $kecamatans, 'kelurahans' => $kelurahans,]);
+        $nomenclatures = Nomenclature::all();
+        return view('administrator.master-data', ['kecamatans' => $kecamatans, 'kelurahans' => $kelurahans, 'nomenclatures' => $nomenclatures]);
     }
 
     public function member() {
@@ -211,6 +215,12 @@ class AdministratorController extends Controller
         $customer->customer_urban_village = $request->customer_urban_village;
         $customer->save();
 
+        $user = User::find($customer->user_id);
+        if($request->password != null) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
+
         return redirect()->back()->with('success', 'Berhasil mengubah data member!');
 
     }
@@ -293,6 +303,13 @@ class AdministratorController extends Controller
         return redirect()->back()->with('success', 'Berhasil menambah data kelurahan!');
     }
 
+    public function addNomenklatur(Request $request) {
+        $nomenclature = new Nomenclature();
+        $nomenclature->nomenclature_name = strtoupper($request->nomenclature_name);
+        $nomenclature->save();
+        return redirect()->back()->with('success', 'Berhasil menambah data tipe bangunan!');
+    }
+
     public function editKecamatan(Request $request) {
         $kecamatan = Kecamatan::find($request->kecamatan);
         $kecamatan->kecamatan_id = $request->kecamatan_id;
@@ -307,8 +324,15 @@ class AdministratorController extends Controller
         $kelurahan->kecamatan_id = $request->kecamatan_id;
         $kelurahan->nama = $request->nama;
         $kelurahan->save();
-        return redirect()->back()->with('success', 'Berhasil menambah data kelurahan!');
+        return redirect()->back()->with('success', 'Berhasil mengubah data kelurahan!');
 
+    }
+
+    public function editNomenklatur(Request $request) {
+        $nomenclature = Nomenclature::find($request->nomenclature);
+        $nomenclature->nomenclature_name = strtoupper($request->nomenclature_name);
+        $nomenclature->save();
+        return redirect()->back()->with('success', 'Berhasil mengubah data tipe bangunan!');
     }
     
     public function deleteKecamatan($id) {
@@ -329,5 +353,12 @@ class AdministratorController extends Controller
 
         return redirect()->back()->with('error', 'Berhasil menghapus data kelurahan!');
 
+    }
+
+    public function deleteNomenklatur($id) {
+        $nomenclatur = Nomenclature::find($id);
+        $nomenclatur->delete();
+
+        return redirect()->back()->with('error', 'Berhasil menghapus data tipe bangunan!');
     }
 }

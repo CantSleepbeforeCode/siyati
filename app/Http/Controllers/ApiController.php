@@ -28,10 +28,10 @@ class ApiController extends Controller
             case 'GET':
                 curl_setopt_array($curl, array(
                     CURLOPT_FRESH_CONNECT  => true,
-                    CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/' . $url,
+                    CURLOPT_URL            => 'https://tripay.co.id/api/' . $url,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_HEADER         => false,
-                    CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . 'DEV-AO1XH8VasPRFOHuF2mZk9Rm5pnssReawJfx2Zy9K'],
+                    CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . '2sipPZVwgnStvLBdU8foUvROOvtF4jbXdG649xtd'],
                     CURLOPT_FAILONERROR    => false,
                     CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
                 ));
@@ -40,10 +40,10 @@ class ApiController extends Controller
             case 'POST':
                 curl_setopt_array($curl, [
                     CURLOPT_FRESH_CONNECT  => true,
-                    CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/' . $url,
+                    CURLOPT_URL            => 'https://tripay.co.id/api/' . $url,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_HEADER         => false,
-                    CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . 'DEV-AO1XH8VasPRFOHuF2mZk9Rm5pnssReawJfx2Zy9K'],
+                    CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . '2sipPZVwgnStvLBdU8foUvROOvtF4jbXdG649xtd'],
                     CURLOPT_FAILONERROR    => false,
                     CURLOPT_POST           => true,
                     CURLOPT_POSTFIELDS     => http_build_query($payload),
@@ -124,7 +124,7 @@ class ApiController extends Controller
             ],
             'return_url'   => 'http://' . $_SERVER['SERVER_NAME'] . '/permintaan',
             'expired_time' => (time() + (24 * 60 * 60)), // 24 jam
-            'signature'    => hash_hmac('sha256', 'T23605' . $orderWithDetail->order_invoice . $orderWithDetail->order_price, 'zpyzM-m03tk-jp4dn-szFas-idlZl')
+            'signature'    => hash_hmac('sha256', 'T23949' . $orderWithDetail->order_invoice . $orderWithDetail->order_price, 'mV5fq-yidrd-z1fAS-9dKsJ-ycW27')
         ];
 
 
@@ -146,7 +146,7 @@ class ApiController extends Controller
     {
         $callbackSignature = $request->server('HTTP_X_CALLBACK_SIGNATURE');
         $json = $request->getContent();
-        $signature = hash_hmac('sha256', $json, 'zpyzM-m03tk-jp4dn-szFas-idlZl');
+        $signature = hash_hmac('sha256', $json, 'mV5fq-yidrd-z1fAS-9dKsJ-ycW27');
 
         if ($signature !== (string) $callbackSignature) {
             return Response::json([

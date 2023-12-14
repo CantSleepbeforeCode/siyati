@@ -57,6 +57,7 @@ Route::get('/administrator/delete-member/{id}', [AdministratorController::class,
 Route::get('/administrator/export-member', [AdministratorController::class, 'exportMember']);
 Route::get('/administrator/hapus-kecamatan/{id}', [AdministratorController::class, 'deleteKecamatan']);
 Route::get('/administrator/hapus-kelurahan/{id}', [AdministratorController::class, 'deleteKelurahan']);
+Route::get('/administrator/hapus-nomenklatur/{id}', [AdministratorController::class, 'deleteNomenklatur']);
 Route::get('/administrator/hapus-armada/{id}', [AdministratorController::class, 'deleteArmada']);
 Route::get('/administrator/tolak-permintaan/{id}', [AdministratorController::class, 'rejectOrder']);
 Route::get('/administrator/selesaikan-permintaan/{id}', [AdministratorController::class, 'doneOrder']);
@@ -64,8 +65,10 @@ Route::get('/administrator/selesaikan-permintaan/{id}', [AdministratorController
 Route::post('/administrator/update-member', [AdministratorController::class, 'updateMember']);
 Route::post('/administrator/tambah-kecamatan', [AdministratorController::class, 'addKecamatan']);
 Route::post('/administrator/tambah-kelurahan', [AdministratorController::class, 'addKelurahan']);
+Route::post('/administrator/tambah-nomenklatur', [AdministratorController::class, 'addNomenklatur']);
 Route::post('/administrator/ubah-kecamatan', [AdministratorController::class, 'editKecamatan']);
 Route::post('/administrator/ubah-kelurahan', [AdministratorController::class, 'editKelurahan']);
+Route::post('/administrator/ubah-nomenklatur', [AdministratorController::class, 'editNomenklatur']);
 Route::post('/administrator/tambah-armada', [AdministratorController::class, 'addArmada']);
 Route::post('/administrator/ubah-armada', [AdministratorController::class, 'editArmada']);
 Route::post('/administrator/pilih-driver', [AdministratorController::class, 'pickArmada']);

@@ -17,9 +17,10 @@
         <div class="mb-3">
             <label for="" class="form-label">Jenis Bangunan</label>
             <select required name="customer_nomenklatur" class="form-control">
-                <option value="PERKANTORAN">PERKANTORAN</option>
-                <option value="HOTEL">HOTEL</option>
-                <option value="RUMAH TANGGA">RUMAH TANGGA</option>
+                <option value="">--- Pilih Jenis Bangunan ---</option>
+                @foreach ($nomenclatures as $nomenclature)
+                <option value="{{$nomenclature->nomenclature_name}}">{{$nomenclature->nomenclature_name}}</option>
+                @endforeach
             </select>
         </div>
         <div class="mb-3">
@@ -31,6 +32,7 @@
                 <div class="mb-3">
                     <label for="" class="form-label">Kecamatan</label>
                     <select required name="customer_subdistrict" class="form-control">
+                        <option value="">--- Pilih Kecamatan ---</option>
                         @foreach ($kecamatans as $kecamatan)
                         <option value="{{$kecamatan->nama}}">{{$kecamatan->nama}}</option>
                         @endforeach
@@ -41,6 +43,7 @@
                 <div class="mb-3">
                     <label for="" class="form-label">Kelurahan</label>
                     <select required name="customer_urban_village" class="form-control">
+                        <option value="">--- Pilih Kelurahan ---</option>
                         @foreach ($kelurahans as $kelurahan)
                         <option value="{{$kelurahan->nama}}">{{$kelurahan->nama}}</option>
                         @endforeach

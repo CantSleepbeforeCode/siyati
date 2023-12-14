@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
+use App\Models\Nomenclature;
 use App\Models\Sepithank;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -67,7 +68,8 @@ class AuthController extends Controller
         if ($request->method() == 'GET') {
             $kecamatans = Kecamatan::all();
             $kelurahans = Kelurahan::all();
-            return view('auth.register', ['kecamatans' => $kecamatans, 'kelurahans' => $kelurahans]);
+            $nomenclatures = Nomenclature::all();
+            return view('auth.register', ['kecamatans' => $kecamatans, 'kelurahans' => $kelurahans, 'nomenclatures' => $nomenclatures]);
         } else if ($request->method() == 'POST') {
             $user = User::where('nik', $request->nik)->first();
             if ($user != null) {

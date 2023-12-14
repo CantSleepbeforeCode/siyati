@@ -66,7 +66,7 @@ class CustomerController extends Controller
             $order->order_invoice = $this->getUniqueCode() . sprintf('%0' . 10 . 's', $index + 1);
             $order->order_lat = $customer->customer_lat;
             $order->order_long = $customer->customer_long;
-            $order->order_price = 300000 * count($request->sepithank);
+            $order->order_price = 5000 * count($request->sepithank);
             // if($price == null) {
             //     $order->order_price = 0;
             // } else {

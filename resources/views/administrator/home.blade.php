@@ -23,45 +23,82 @@
             </div>
         @endif
 
-        <div class="row">
-            <div class="col">
-                <div class="card bg-success text-white">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <p class="mb-0">PERMINTAAN</p>
-                            <p class="fw-bolder fs-6">{{ $orderOrdered }}</p>
+
+        <div class="card w-100">
+            <div class="card-body">
+                <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                    <div class="mb-3 mb-sm-0">
+                        <h5 class="card-title fw-semibold">Jumlah Permintaan</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <p class="mb-0">PERMINTAAN</p>
+                                    <p class="fw-bolder fs-6">{{ $orderOrdered }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <p class="mb-0">PROSES</p>
+                                    <p class="fw-bolder fs-6">{{ $orderProcess }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <p class="mb-0">DITOLAK</p>
+                                    <p class="fw-bolder fs-6">{{ $orderFailed }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <p class="mb-0">SELESAI</p>
+                                    <p class="fw-bolder fs-6">{{ $orderDone }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="card bg-warning text-white">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <p class="mb-0">PROSES</p>
-                            <p class="fw-bolder fs-6">{{ $orderProcess }}</p>
-                        </div>
+        </div>
+
+        <div class="card w-100">
+            <div class="card-body">
+                <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                    <div class="mb-3 mb-sm-0">
+                        <h5 class="card-title fw-semibold">Jumlah Bangunan</h5>
                     </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="card bg-danger text-white">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <p class="mb-0">DITOLAK</p>
-                            <p class="fw-bolder fs-6">{{ $orderFailed }}</p>
+                <div class="row">
+                    @php
+                        $color = ['primary', 'secondary', 'info', 'warning', 'danger', 'dark'];
+                    @endphp
+                    @foreach ($buildings as $building)
+                        <div class="col">
+                            <div class="card bg-{{$color[rand(0,5)]}} text-white">
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <p class="mb-0">{{ $building->customer_nomenklatur }}</p>
+                                        <p class="fw-bolder fs-6">{{ $building->total }}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card bg-primary text-white">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <p class="mb-0">SELESAI</p>
-                            <p class="fw-bolder fs-6">{{ $orderDone }}</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -152,13 +189,17 @@
                                             <td class="border-bottom-0 text-center">
                                                 <div class="">
                                                     @if ($order->order_status_job == 'not_start')
-                                                        <span class="badge bg-dark rounded-3 fw-semibold">Belum Dimulai</span>
+                                                        <span class="badge bg-dark rounded-3 fw-semibold">Belum
+                                                            Dimulai</span>
                                                     @elseif($order->order_status_job == 'on_queue')
-                                                        <span class="badge bg-info rounded-3 fw-semibold">Dalam Antrian</span>
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Dalam
+                                                            Antrian</span>
                                                     @elseif($order->order_status_job == 'on_the_way')
-                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang Dijalan</span>
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang
+                                                            Dijalan</span>
                                                     @elseif($order->order_status_job == 'on_process')
-                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang Dikerjakan</span>
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang
+                                                            Dikerjakan</span>
                                                     @elseif($order->order_status_job == 'done')
                                                         <span class="badge bg-success rounded-3 fw-semibold">Selesai</span>
                                                     @elseif($order->order_status_job == 'rejected')
