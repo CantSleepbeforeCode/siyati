@@ -378,7 +378,7 @@ class AdministratorController extends Controller
                 $order->order_status_payment = 'fail_pay';
                 break;
             default:
-                break;
+            return redirect()->back()->with('error', 'Pemesanan dengan invoice '. $order->order_invoice .' belum dibayar!s');
         }
 
         $order->save();
