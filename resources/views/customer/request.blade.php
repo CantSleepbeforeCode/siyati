@@ -463,6 +463,10 @@
     <script>
         let priceSelected = 300000;
 
+        function updatePrice(price) {
+            priceSelected = price;
+        }
+
         function getPayment() {
             let channels = document.getElementsByClassName('text-payment')
             for (let i = 0; i < channels.length; i++) {
