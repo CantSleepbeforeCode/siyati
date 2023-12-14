@@ -143,6 +143,12 @@
                                             <td class="border-bottom-0">
                                                 <button class="btn btn-info" data-bs-toggle="modal"
                                                     data-bs-target="#detailModal{{ $order->order_id }}">Detail</button>
+
+                                                @if ($order->order_status_payment == 'ordered' && $order->order_payment_method == 'non_tunai')
+                                                    <a href="/administrator/cek-pembayaran/{{ $order->order_invoice }}"
+                                                        class="btn btn-success">Cek Pembayaran</a>
+                                                @endif
+
                                                 @if ($order->order_status_payment == 'ordered')
                                                     @if ($order->order_status_job == 'not_start' && $order->order_payment_method == 'tunai')
                                                         <button class="btn btn-primary" data-bs-toggle="modal"
@@ -157,17 +163,17 @@
                                                         data-bs-target="#driverModal{{ $order->order_id }}">Pilih
                                                         Driver</button>
                                                 @endif
-                                                @if($order->order_status_job == 'not_start' || $order->order_status_job == 'on_queue' || $order->order_status_job == 'on_the_way' || $order->order_status_job == 'on_process' )
-                                                <button class="btn btn-danger" data-bs-toggle="modal"
-                                                    data-bs-target="#rejectModal{{ $order->order_id }}">Tolak</button>
+                                                @if (
+                                                    $order->order_status_job == 'not_start' ||
+                                                        $order->order_status_job == 'on_queue' ||
+                                                        $order->order_status_job == 'on_the_way' ||
+                                                        $order->order_status_job == 'on_process')
+                                                    <button class="btn btn-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#rejectModal{{ $order->order_id }}">Tolak</button>
                                                 @endif
-                                                @if($order->order_status_job == 'on_process')
-                                                <button class="btn btn-success" data-bs-toggle="modal"
-                                                    data-bs-target="#doneModal{{ $order->order_id }}">Selesai</button>
-                                                @endif
-
-                                                @if($order->order_status_payment == 'ordered' && $order->order_payment_method == 'non_tunai')
-                                                <a href="/administrator/cek-pembayaran/{{$order->order_invoice}}" class="btn btn-info">Cek Pembayaran</a>
+                                                @if ($order->order_status_job == 'on_process')
+                                                    <button class="btn btn-success" data-bs-toggle="modal"
+                                                        data-bs-target="#doneModal{{ $order->order_id }}">Selesai</button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -187,7 +193,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="detailModalLabel">Detail Pesanan</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <table class="table table-striped">
@@ -205,141 +212,143 @@
                                 @endforeach
                             </table>
 
-    
+
                             @if ($order->order_proof_photo != null)
-                            <hr class="mt-4 mb-2">
-                            <p>Bukti Pengerjaan</p>
+                                <hr class="mt-4 mb-2">
+                                <p>Bukti Pengerjaan</p>
                                 <div class="text-center">
                                     <img src="{{ $order->order_proof_photo }}" width="400">
                                 </div>
                             @endif
 
-                            @if($order->customer != null)
-                            <hr class="mt-4 mb-2">
-                            <p>Data Customer</p>
-                            <div class="row">
-                                <div class="col-2">
-                                    Nama
+                            @if ($order->customer != null)
+                                <hr class="mt-4 mb-2">
+                                <p>Data Customer</p>
+                                <div class="row">
+                                    <div class="col-2">
+                                        Nama
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->customer->customer_name }}
+                                    </div>
                                 </div>
-                                <div class="col-1">
-                                    :
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        HP
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->customer->customer_phone }}
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    {{$order->customer->customer_name}}
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        Alamat
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->customer->customer_address }} Kelurahan
+                                        {{ $order->customer->customer_subdistrict }} Kecamatan
+                                        {{ $order->customer->customer_urban_village }}
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-2">
-                                    HP
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        Jenis Bangunan
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->customer->customer_nomenklatur }}
+                                    </div>
                                 </div>
-                                <div class="col-1">
-                                    :
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        Foto Bangunan
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        <img src="{{ $order->customer->customer_photo }}" class="img-fluid">
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    {{$order->customer->customer_phone}}
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-2">
-                                    Alamat
-                                </div>
-                                <div class="col-1">
-                                    :
-                                </div>
-                                <div class="col">
-                                    {{$order->customer->customer_address}} Kelurahan {{$order->customer->customer_subdistrict}} Kecamatan {{$order->customer->customer_urban_village}}
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-2">
-                                    Jenis Bangunan
-                                </div>
-                                <div class="col-1">
-                                    :
-                                </div>
-                                <div class="col">
-                                    {{$order->customer->customer_nomenklatur}}
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-2">
-                                    Foto Bangunan
-                                </div>
-                                <div class="col-1">
-                                    :
-                                </div>
-                                <div class="col">
-                                    <img src="{{$order->customer->customer_photo}}" class="img-fluid">
-                                </div>
-                            </div>
                             @endif
 
-                            @if($order->armada != null)
-                            <hr class="mt-4 mb-2">
-                            <p>Data Armada</p>
-                            <div class="row">
-                                <div class="col-2">
-                                    Nama
+                            @if ($order->armada != null)
+                                <hr class="mt-4 mb-2">
+                                <p>Data Armada</p>
+                                <div class="row">
+                                    <div class="col-2">
+                                        Nama
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->armada->armada_driver }}
+                                    </div>
                                 </div>
-                                <div class="col-1">
-                                    :
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        Nomor Polisi
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->armada->armada_plat }}
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    {{$order->armada->armada_driver}}
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        ID GPS
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->armada->armada_id_gps }}
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-2">
-                                    Nomor Polisi
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        Wilayah
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->armada->kecamatan->nama }}
+                                    </div>
                                 </div>
-                                <div class="col-1">
-                                    :
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        Foto Driver
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        <img src="{{ $order->armada->armada_driver_photo }}" class="img-fluid">
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    {{$order->armada->armada_plat}}
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-2">
-                                    ID GPS
-                                </div>
-                                <div class="col-1">
-                                    :
-                                </div>
-                                <div class="col">
-                                    {{$order->armada->armada_id_gps}}
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-2">
-                                    Wilayah
-                                </div>
-                                <div class="col-1">
-                                    :
-                                </div>
-                                <div class="col">
-                                    {{$order->armada->kecamatan->nama}}
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-2">
-                                    Foto Driver
-                                </div>
-                                <div class="col-1">
-                                    :
-                                </div>
-                                <div class="col">
-                                    <img src="{{$order->armada->armada_driver_photo}}" class="img-fluid">
-                                </div>
-                            </div>
                             @endif
                         </div>
                         <div class="modal-footer">
@@ -359,18 +368,20 @@
                         </div>
                         <form action="/administrator/pilih-driver" method="POST">
                             @csrf
-                            <input type="hidden" name="order" value="{{$order->order_id}}">
+                            <input type="hidden" name="order" value="{{ $order->order_id }}">
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col-12">
                                         <label for="" class="form-label">Wilayah</label>
                                         <select name="armada_id" class="form-control">
                                             @foreach ($armadas as $armada)
-                                            @if($armada->armada_id == $armada->armada_subdistinct)
-                                            <option value="{{$armada->armada_id}}" selected>{{$armada->armada_id}} - {{$armada->armada_driver}}</option>
-                                            @else
-                                            <option value="{{$armada->armada_id}}">{{$armada->armada_id}} - {{$armada->armada_driver}}</option>
-                                            @endif
+                                                @if ($armada->armada_id == $armada->armada_subdistinct)
+                                                    <option value="{{ $armada->armada_id }}" selected>
+                                                        {{ $armada->armada_id }} - {{ $armada->armada_driver }}</option>
+                                                @else
+                                                    <option value="{{ $armada->armada_id }}">{{ $armada->armada_id }} -
+                                                        {{ $armada->armada_driver }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
@@ -390,14 +401,16 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="rejectModalLabel">Tolak Pesanan</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Anda yakin ingin menolak permintaan invoice #{{$order->order_invoice}}?
+                            Anda yakin ingin menolak permintaan invoice #{{ $order->order_invoice }}?
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                            <a href="/administrator/tolak-permintaan/{{$order->order_id}}" class="btn btn-danger">Tolak</a>
+                            <a href="/administrator/tolak-permintaan/{{ $order->order_id }}"
+                                class="btn btn-danger">Tolak</a>
                         </div>
                     </div>
                 </div>
@@ -408,14 +421,16 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="doneModalLabel">Selesaikan Pesanan</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Anda yakin ingin menyelesaikan permintaan invoice #{{$order->order_invoice}}?
+                            Anda yakin ingin menyelesaikan permintaan invoice #{{ $order->order_invoice }}?
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                            <a href="/administrator/selesaikan-permintaan/{{$order->order_id}}" class="btn btn-success">Selesai</a>
+                            <a href="/administrator/selesaikan-permintaan/{{ $order->order_id }}"
+                                class="btn btn-success">Selesai</a>
                         </div>
                     </div>
                 </div>

@@ -369,13 +369,13 @@ class AdministratorController extends Controller
 
         switch ($checkTransaction->data->status) {
             case 'PAID':
-                $order->status = 'payed';
+                $order->order_status_payment = 'payed';
                 return redirect()->back()->with('success', 'Pemesanan dengan invoice '. $order->order_invoice .' berhasil dibayar!');
             case 'EXPIRED':
-                $order->status = 'fail_pay';
+                $order->order_status_payment = 'fail_pay';
                 break;
             case 'FAILED':
-                $order->status = 'fail_pay';
+                $order->order_status_payment = 'fail_pay';
                 break;
             default:
                 break;
