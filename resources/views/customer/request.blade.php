@@ -142,7 +142,8 @@
                                                 @if ($order->order_status_payment == 'ordered')
                                                     @if ($order->order_payment_method == 'non_tunai' && $order->channel_id == null)
                                                         <button class="btn btn-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#paymentModal{{ $order->order_id }}" onclick="updatePrice({{$order->order_price}})">Bayar</button>
+                                                            data-bs-target="#paymentModal{{ $order->order_id }}"
+                                                            onclick="updatePrice({{ $order->order_price }})">Bayar</button>
                                                     @elseif($order->channel_id != null)
                                                         <a href="{{ $order->payment_url }}"
                                                             class="btn btn-primary">Bayar</a>
@@ -193,8 +194,8 @@
                                     @foreach ($sepithanks as $sepithank)
                                         <li class="text-center">
                                             <label>
-                                                <input class="form-check-input" type="checkbox" name="sepithank[]" required
-                                                    value="{{ $sepithank->sepithank_id }}"
+                                                <input class="form-check-input" type="checkbox" name="sepithank[]"
+                                                    required value="{{ $sepithank->sepithank_id }}"
                                                     label="{{ $sepithank->sepithank_vol }} {{ $sepithank->sepithank_unit }}">
                                                 {{ $sepithank->sepithank_vol }} {{ $sepithank->sepithank_unit }}
                                             </label>
@@ -352,8 +353,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                            <a href="/selesaikan-permintaan/{{ $order->order_id }}"
-                                class="btn btn-success">Selesai</a>
+                            <a href="/selesaikan-permintaan/{{ $order->order_id }}" class="btn btn-success">Selesai</a>
                         </div>
                     </div>
                 </div>
@@ -465,6 +465,7 @@
 
         function updatePrice(price) {
             priceSelected = price;
+            getPayment();
         }
 
         function getPayment() {
@@ -545,7 +546,5 @@
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
-
-        getPayment();
     </script>
 @endsection
