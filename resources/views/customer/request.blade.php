@@ -142,7 +142,7 @@
                                                 @if ($order->order_status_payment == 'ordered')
                                                     @if ($order->order_payment_method == 'non_tunai' && $order->channel_id == null)
                                                         <button class="btn btn-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#paymentModal{{ $order->order_id }}">Bayar</button>
+                                                            data-bs-target="#paymentModal{{ $order->order_id }}" onclick="updatePrice({{$order->order_price}})">Bayar</button>
                                                     @elseif($order->channel_id != null)
                                                         <a href="{{ $order->payment_url }}"
                                                             class="btn btn-primary">Bayar</a>
