@@ -1,10 +1,10 @@
-{{-- @php
+@php
     function rupiah($angka)
     {
         $hasil_rupiah = 'Rp' . number_format($angka, 0, ',', '.');
         return $hasil_rupiah;
     }
-@endphp --}}
+@endphp
 
 @extends('base.administrator')
 
@@ -196,7 +196,7 @@
                                     <tr>
                                         <td>{{ $detail->sepithank->sepithank_vol }}</td>
                                         <td>{{ $detail->sepithank->sepithank_unit }}</td>
-                                        <td>{{ rupiah($detail->price / count($order->detailOrderSepithank)) }}</td>
+                                        <td>{{ rupiah($detail->price) }}</td>
                                     </tr>
                                 @endforeach
                             </table>
