@@ -83,7 +83,7 @@ class CustomerController extends Controller
                 $detailOrder = new DetailOrderSepithank();
                 $detailOrder->order_id = $order->order_id;
                 $detailOrder->sepithank_id = $sepithank;
-                $detailOrder->price = 300000;
+                $detailOrder->price = 5000;
                 $detailOrder->save();
             }
             return redirect()->back()->with('success', 'Berhasil membuat tiket!');

@@ -361,4 +361,28 @@ class AdministratorController extends Controller
 
         return redirect()->back()->with('error', 'Berhasil menghapus data tipe bangunan!');
     }
+
+    public function checkPayment($invoice)
+    {
+        $order = Order::where('invoice', $invoice)->first();
+        $checkTransaction = $this->apiController->getTransactionTripay($order);
+
+        switch ($checkTransaction->data->status) {
+            case 'PAID':
+                $order->status = 'payed';
+                return redirect()->back()->with('success', 'Pemesanan dengan invoice '. $order->order_invoice .' berhasil dibayar!');
+            case 'EXPIRED':
+                $order->status = 'fail_pay';
+                break;
+            case 'FAILED':
+                $order->status = 'fail_pay';
+                break;
+            default:
+                break;
+        }
+
+        $order->save();
+
+        return redirect()->back()->with('error', 'Pemesanan dengan invoice '. $order->order_invoice .' gagal dibayar! Silakan cek Tripay untuk informasi lebih lanjut');
+    }
 }

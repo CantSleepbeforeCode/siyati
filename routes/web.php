@@ -61,6 +61,7 @@ Route::get('/administrator/hapus-nomenklatur/{id}', [AdministratorController::cl
 Route::get('/administrator/hapus-armada/{id}', [AdministratorController::class, 'deleteArmada']);
 Route::get('/administrator/tolak-permintaan/{id}', [AdministratorController::class, 'rejectOrder']);
 Route::get('/administrator/selesaikan-permintaan/{id}', [AdministratorController::class, 'doneOrder']);
+Route::get('/administrator/cek-pembayaran/{invoice}', [AdministratorController::class, 'checkPayment']);
 
 Route::post('/administrator/update-member', [AdministratorController::class, 'updateMember']);
 Route::post('/administrator/tambah-kecamatan', [AdministratorController::class, 'addKecamatan']);

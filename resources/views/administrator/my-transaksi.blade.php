@@ -165,6 +165,10 @@
                                                 <button class="btn btn-success" data-bs-toggle="modal"
                                                     data-bs-target="#doneModal{{ $order->order_id }}">Selesai</button>
                                                 @endif
+
+                                                @if($order->order_status_payment == 'ordered' && $order->order_payment_method != 'non_tunai')
+                                                <a href="/administrator/cek-pembayaran/{{$order->order_invoice}}" class="btn btn-info">Cek Pembayaran</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
