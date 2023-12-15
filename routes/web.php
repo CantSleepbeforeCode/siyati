@@ -73,6 +73,7 @@ Route::post('/administrator/ubah-nomenklatur', [AdministratorController::class, 
 Route::post('/administrator/tambah-armada', [AdministratorController::class, 'addArmada']);
 Route::post('/administrator/ubah-armada', [AdministratorController::class, 'editArmada']);
 Route::post('/administrator/pilih-driver', [AdministratorController::class, 'pickArmada']);
+Route::post('/administrator/ecosystem-filter-member', [AdministratorController::class, 'filterMember']);
 
 // Armada
 Route::get('/armada/beranda', [ArmadaController::class, 'home']);

@@ -202,7 +202,9 @@ class AdministratorController extends Controller
     }
 
     public function ecosystem() {
-        return view('administrator.ecosystem-siyati');
+        $customers = Customer::with(['user', 'sepithank'])->get();
+        $nomenclatures = Nomenclature::all();
+        return view('administrator.ecosystem-siyati', ['customers' => $customers, 'nomenclatures' => $nomenclatures]);
     }
 
     public function updateMember(Request $request) {
@@ -378,11 +380,23 @@ class AdministratorController extends Controller
                 $order->order_status_payment = 'fail_pay';
                 break;
             default:
-            return redirect()->back()->with('error', 'Pemesanan dengan invoice '. $order->order_invoice .' belum dibayar!s');
+            return redirect()->back()->with('error', 'Pemesanan dengan invoice '. $order->order_invoice .' belum dibayar!');
         }
 
         $order->save();
 
         return redirect()->back()->with('error', 'Pemesanan dengan invoice '. $order->order_invoice .' gagal dibayar! Silakan cek Tripay untuk informasi lebih lanjut');
+    }
+
+    public function filterMember(Request $request) {
+        if($request->nomenclature == 'all') {
+            $customers = Customer::with('user')->get();
+        } else {
+            $customers = Customer::with('user')->where('customer_nomenklatur', $request->nomenclature)->get();
+        }
+
+        return [
+            'datas' => $customers
+        ];
     }
 }
