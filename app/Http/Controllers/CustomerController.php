@@ -86,6 +86,13 @@ class CustomerController extends Controller
                 $detailOrder->price = 5000;
                 $detailOrder->save();
             }
+
+            $this->apiController->sendMessageWhatsapp(
+                '6282252088585', 
+                "Halo Admin Siyati!
+            
+    Terdapat permintaan sedot tinja baru dari " . $customer->customer_name . " dengan tipe bangunan " . $customer->customer_nomenklatur . "!
+    Silakan buka website Siyati untuk memproses!");
             return redirect()->back()->with('success', 'Berhasil membuat tiket!');
             // } else {
             //     return redirect()->back()->with('error', 'Anda memiliki tiket aktif! Silakan selesaikan tiket aktif terlebih dahulu.');

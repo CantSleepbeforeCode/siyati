@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Armada;
+use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,8 +13,11 @@ class ArmadaController extends Controller
 {
     
     private $maxSize = 1048576;
-    public function __construct()
+    protected $apiController;
+
+    public function __construct(ApiController $apiController)
     {
+        $this->apiController = $apiController;
         $this->middleware(function ($request, $next) {
             if (Auth::guest()) {
                 Redirect::to("/")->send();
@@ -42,9 +46,15 @@ class ArmadaController extends Controller
 
     public function doTheWork($id) {
         $order = Order::find($id);
+        $customer = Customer::find($order->customer_id);
         $order->order_status_job = 'on_process';
         if($order->order_payment_method == 'tunai') {
             $order->order_status_payment = 'payed';
+            $this->apiController->sendMessageWhatsapp(
+                $customer->customer_phone, 
+                "Halo " . $customer->customer_name . "!
+            
+Kami berhasil menerima dana anda! Silakan menunggu petugas kami dalam memproses Septic Tank anda. Terimakasih!");
         }
         $order->save();
         return redirect()->back()->with('success', 'Status telah berubah. Semangat bekerja!');

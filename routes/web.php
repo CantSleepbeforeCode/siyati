@@ -28,7 +28,7 @@ Route::post('/masuk', [AuthController::class, 'login']);
 Route::post('/daftar', [AuthController::class, 'signUp']);
 
 Route::post('/send-location', [ApiController::class, 'sendLocation']);
-
+Route::get('/test-wa', [ApiController::class, 'testWa']);
 // Customer
 Route::get('/beranda', [CustomerController::class, 'home']);
 Route::get('/permintaan', [CustomerController::class, 'request']);
