@@ -447,7 +447,8 @@
 
     <script>
         new DataTable('#table', {
-            responsive: true
+            responsive: true,
+            ordering: false
         });
     </script>
 @endsection

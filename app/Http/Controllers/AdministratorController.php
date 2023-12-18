@@ -171,7 +171,8 @@ class AdministratorController extends Controller
 
     public function transaction() {
         $armadas = Armada::all();
-        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer', 'armada.kecamatan'])->orderBy('order_id', 'desc')->get();
+        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer', 'armada.kecamatan'])->orderBy('order_date', 'desc')->get();
+
         return view('administrator.my-transaksi', ['orders' => $orders, 'armadas' => $armadas]);
     }
 

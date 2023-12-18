@@ -294,21 +294,21 @@
     @foreach ($orders as $order)
         @if ($order->order_proof_photo == null)
             <script>
-                var map = L.map('map{{ $order->order_id }}').setView([{{ $order->customer->customer_lat }},
+                var map{{$order->order_id}} = L.map('map{{ $order->order_id }}').setView([{{ $order->customer->customer_lat }},
                     {{ $order->customer->customer_long }}
                 ], 13);
                 $(document).ready(function() {
 
                     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
+                    }).addTo(map{{$order->order_id}});
 
-                    L.marker([{{ $order->customer->customer_lat }}, {{ $order->customer->customer_long }}]).addTo(map);
+                    L.marker([{{ $order->customer->customer_lat }}, {{ $order->customer->customer_long }}]).addTo(map{{$order->order_id}});
                 });
 
                 $('#detailModal{{ $order->order_id }}').on('shown.bs.modal', function() {
                     setTimeout(function() {
-                        map.invalidateSize();
+                        map{{$order->order_id}}.invalidateSize();
                     }, 1);
                 });
             </script>
