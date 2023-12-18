@@ -33,7 +33,7 @@ class ArmadaController extends Controller
 
     public function home() {
         $armada = Armada::where('user_id', Auth::id())->first();
-        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer'])->where('armada_id', $armada->armada_id)->whereIn('order_status_job', ['on_queue', 'on_the_way', 'on_process', 'done', 'rejected'])->orderBy('order_id', 'desc')->get();
+        $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer', 'armada'])->where('armada_id', $armada->armada_id)->whereIn('order_status_job', ['on_queue', 'on_the_way', 'on_process', 'done', 'rejected'])->orderBy('order_id', 'desc')->get();
         return view('armada.home', ['orders' => $orders]);
     }
 

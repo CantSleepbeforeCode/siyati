@@ -202,6 +202,136 @@
                                 <img src="{{ $order->order_proof_photo }}" width="400">
                             </div>
                         @endif
+
+                        @if ($order->customer != null)
+                            <hr class="mt-4 mb-2">
+                            <p>Data Customer</p>
+                            <div class="row">
+                                <div class="col-2">
+                                    Nama
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    {{ $order->customer->customer_name }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2">
+                                    HP
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    {{ $order->customer->customer_phone }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2">
+                                    Alamat
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    {{ $order->customer->customer_address }} Kelurahan
+                                    {{ $order->customer->customer_subdistrict }} Kecamatan
+                                    {{ $order->customer->customer_urban_village }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2">
+                                    Jenis Bangunan
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    {{ $order->customer->customer_nomenklatur }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2">
+                                    Foto Bangunan
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    <img src="{{ $order->customer->customer_photo }}" class="img-fluid">
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($order->armada != null)
+                            <hr class="mt-4 mb-2">
+                            <p>Data Armada</p>
+                            <div class="row">
+                                <div class="col-2">
+                                    Nama
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    {{ $order->armada->armada_driver }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2">
+                                    Nomor Polisi
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    {{ $order->armada->armada_plat }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2">
+                                    ID GPS
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    {{ $order->armada->armada_id_gps }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2">
+                                    Wilayah
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    {{ $order->armada->kecamatan->nama }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2">
+                                    Foto Driver
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col">
+                                    <img src="{{ $order->armada->armada_driver_photo }}" class="img-fluid">
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
