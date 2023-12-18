@@ -140,6 +140,7 @@
         });
 
         function refreshTable() {
+            let tables = document.getElementById('tbody');
             table.destroy();
             let value = document.getElementById('filter-member').value;
 
@@ -154,7 +155,6 @@
                 url: '/administrator/ecosystem-filter-member',
                 data: datas,
                 success: function(response) {
-                    let tables = document.getElementById('tbody');
                     for (let i = 0; i < response.datas.length; i++) {
                         tables.innerHTML = `
                                         <tr>
