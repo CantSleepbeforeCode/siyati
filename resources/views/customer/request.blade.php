@@ -254,12 +254,9 @@
                                 @endforeach
                             </table>
     
-                            <hr class="mt-2 mb-2">
     
-                            @if ($order->order_proof_photo == null)
-                                <p>Lokasi</p>
-                                <div id="map{{ $order->order_id }}" style="height: 300px;"></div>
-                            @else
+                            @if ($order->order_proof_photo != null)
+                            <hr class="mt-2 mb-2">
                             <p>Bukti Pengerjaan</p>
                                 <div class="text-center">
                                     <img src="{{ $order->order_proof_photo }}" width="400">
