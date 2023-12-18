@@ -253,6 +253,201 @@
                                     </tr>
                                 @endforeach
                             </table>
+    
+                            <hr class="mt-2 mb-2">
+    
+                            @if ($order->order_proof_photo == null)
+                                <p>Lokasi</p>
+                                <div id="map{{ $order->order_id }}" style="height: 300px;"></div>
+                            @else
+                            <p>Bukti Pengerjaan</p>
+                                <div class="text-center">
+                                    <img src="{{ $order->order_proof_photo }}" width="400">
+                                </div>
+                            @endif
+    
+                            @if ($order->customer != null)
+                                <hr class="mt-4 mb-2">
+                                <p>Data Customer</p>
+                                <div class="row">
+                                    <div class="col-2">
+                                        Nama
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->customer->customer_name }}
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-2">
+                                        HP
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->customer->customer_phone }}
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-2">
+                                        Alamat
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->customer->customer_address }} Kelurahan
+                                        {{ $order->customer->customer_subdistrict }} Kecamatan
+                                        {{ $order->customer->customer_urban_village }}
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-2">
+                                        Jenis Bangunan
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->customer->customer_nomenklatur }}
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-2">
+                                        Foto Bangunan
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        <img src="{{ $order->customer->customer_photo }}" class="img-fluid">
+                                    </div>
+                                </div>
+                            @endif
+    
+                            @if ($order->armada != null)
+                                <hr class="mt-4 mb-2">
+                                <p>Data Armada</p>
+                                <div class="row">
+                                    <div class="col-2">
+                                        Nama
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->armada->armada_driver }}
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-2">
+                                        Nomor Polisi
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->armada->armada_plat }}
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-2">
+                                        ID GPS
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->armada->armada_id_gps }}
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-2">
+                                        Wilayah
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        {{ $order->armada->kecamatan->nama }}
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-2">
+                                        Foto Driver
+                                    </div>
+                                    <div class="col-1">
+                                        :
+                                    </div>
+                                    <div class="col">
+                                        <img src="{{ $order->armada->armada_driver_photo }}" class="img-fluid">
+                                    </div>
+                                </div>
+                            @endif
+    
+                            <hr class="mt-4 mb-2">
+                            <b><p>Proses Pengerjaan</p></b>
+                            <table class="table">
+                                <thead class="thead-primary">
+                                    <tr>
+                                        <th>Tahap</th>
+                                        <th class="text-center">Tanggal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Dibayar</td>
+                                        @if($order->date_payed == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{ date_format(date_create($order->date_payed), 'd M Y, H:i') }}</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
+                                        <td>Dalam Antrian</td>
+                                        @if($order->date_queue == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{ date_format(date_create($order->date_queue), 'd M Y, H:i') }}</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
+                                        <td>Dalam Perjalanan</td>
+                                        @if($order->date_on_the_way == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{ date_format(date_create($order->date_on_the_way), 'd M Y, H:i') }}</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
+                                        <td>Dalam Pengerjaan</td>
+                                        @if($order->date_process == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{ date_format(date_create($order->date_process), 'd M Y, H:i') }}</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
+                                        <td>Selesai</td>
+                                        @if($order->date_done == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{ date_format(date_create($order->date_done), 'd M Y, H:i') }}</td>
+                                        @endif
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

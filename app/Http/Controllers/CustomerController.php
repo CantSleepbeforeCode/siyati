@@ -47,7 +47,7 @@ class CustomerController extends Controller
         $customer = Customer::where('user_id', Auth::id())->first();
         if ($request->method() == 'GET') {
             $sepithanks = Sepithank::where('customer_id', $customer->customer_id)->get();
-            $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank'])->where('customer_id', $customer->customer_id)->orderBy('order_id', 'desc')->get();
+            $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer', 'armada.kecamatan'])->where('customer_id', $customer->customer_id)->orderBy('order_id', 'desc')->get();
             $paymentGroups = TripayChannel::distinct()->get(['channel_group']);
             $paymentChannels = TripayChannel::all();
             return view('customer.request', ['customer' => $customer, 'orders' => $orders, 'paymentGroups' => $paymentGroups, 'paymentChannels' => $paymentChannels, 'sepithanks' => $sepithanks,]);
