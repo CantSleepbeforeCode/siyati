@@ -372,6 +372,7 @@ class AdministratorController extends Controller
         switch ($checkTransaction->data->status) {
             case 'PAID':
                 $order->order_status_payment = 'payed';
+                $order->save();
                 return redirect()->back()->with('success', 'Pemesanan dengan invoice '. $order->order_invoice .' berhasil dibayar!');
             case 'EXPIRED':
                 $order->order_status_payment = 'fail_pay';
@@ -380,11 +381,10 @@ class AdministratorController extends Controller
                 $order->order_status_payment = 'fail_pay';
                 break;
             default:
-            return redirect()->back()->with('error', 'Pemesanan dengan invoice '. $order->order_invoice .' belum dibayar!');
+                return redirect()->back()->with('error', 'Pemesanan dengan invoice '. $order->order_invoice .' belum dibayar!');
         }
 
         $order->save();
-
         return redirect()->back()->with('error', 'Pemesanan dengan invoice '. $order->order_invoice .' gagal dibayar! Silakan cek Tripay untuk informasi lebih lanjut');
     }
 

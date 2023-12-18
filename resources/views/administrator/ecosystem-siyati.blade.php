@@ -147,6 +147,7 @@
                 _token: "{{ csrf_token() }}",
                 nomenclature: value
             };
+            tables.innerHTML = '';
 
             $.ajax({
                 type: 'POST',
@@ -154,7 +155,6 @@
                 data: datas,
                 success: function(response) {
                     let tables = document.getElementById('tbody');
-                    tables.innerHTML = null;
                     for (let i = 0; i < response.datas.length; i++) {
                         tables.innerHTML = `
                                         <tr>
