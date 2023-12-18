@@ -144,7 +144,7 @@
                                                 <button class="btn btn-info" data-bs-toggle="modal"
                                                     data-bs-target="#detailModal{{ $order->order_id }}">Detail</button>
 
-                                                @if ($order->order_status_payment == 'ordered' && $order->order_payment_method == 'non_tunai')
+                                                @if ($order->order_status_payment == 'ordered' && $order->order_payment_method == 'non_tunai' && $order->channel_id != null)
                                                     <a href="/administrator/cek-pembayaran/{{ $order->order_invoice }}"
                                                         class="btn btn-success">Cek Pembayaran</a>
                                                 @endif
@@ -366,7 +366,7 @@
                                         @if($order->date_payed == null)
                                         <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{$order->date_payed}}</td>
+                                        <td class="text-center">{{ date_format(date_create($order->date_payed), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                     <tr>
@@ -374,7 +374,7 @@
                                         @if($order->date_queue == null)
                                         <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{$order->date_queue}}</td>
+                                        <td class="text-center">{{ date_format(date_create($order->date_queue), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                     <tr>
@@ -382,7 +382,7 @@
                                         @if($order->date_on_the_way == null)
                                         <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{$order->date_on_the_way}}</td>
+                                        <td class="text-center">{{ date_format(date_create($order->date_on_the_way), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                     <tr>
@@ -390,7 +390,7 @@
                                         @if($order->date_process == null)
                                         <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{$order->date_process}}</td>
+                                        <td class="text-center">{{ date_format(date_create($order->date_process), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                     <tr>
@@ -398,7 +398,7 @@
                                         @if($order->date_done == null)
                                         <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{$order->date_done}}</td>
+                                        <td class="text-center">{{ date_format(date_create($order->date_done), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                 </tbody>

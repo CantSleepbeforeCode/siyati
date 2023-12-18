@@ -332,7 +332,7 @@
                                 </div>
                             </div>
                         @endif
-                        
+
                         <hr class="mt-4 mb-2">
                         <b><p>Proses Pengerjaan</p></b>
                         <table class="table">
@@ -348,7 +348,7 @@
                                     @if($order->date_payed == null)
                                     <td class="text-center">-</td>
                                     @else
-                                    <td class="text-center">{{$order->date_payed}}</td>
+                                    <td class="text-center">{{ date_format(date_create($order->date_payed), 'd M Y, H:i') }}</td>
                                     @endif
                                 </tr>
                                 <tr>
@@ -356,7 +356,7 @@
                                     @if($order->date_queue == null)
                                     <td class="text-center">-</td>
                                     @else
-                                    <td class="text-center">{{$order->date_queue}}</td>
+                                    <td class="text-center">{{ date_format(date_create($order->date_queue), 'd M Y, H:i') }}</td>
                                     @endif
                                 </tr>
                                 <tr>
@@ -364,7 +364,7 @@
                                     @if($order->date_on_the_way == null)
                                     <td class="text-center">-</td>
                                     @else
-                                    <td class="text-center">{{$order->date_on_the_way}}</td>
+                                    <td class="text-center">{{ date_format(date_create($order->date_on_the_way), 'd M Y, H:i') }}</td>
                                     @endif
                                 </tr>
                                 <tr>
@@ -372,7 +372,7 @@
                                     @if($order->date_process == null)
                                     <td class="text-center">-</td>
                                     @else
-                                    <td class="text-center">{{$order->date_process}}</td>
+                                    <td class="text-center">{{ date_format(date_create($order->date_process), 'd M Y, H:i') }}</td>
                                     @endif
                                 </tr>
                                 <tr>
@@ -380,7 +380,7 @@
                                     @if($order->date_done == null)
                                     <td class="text-center">-</td>
                                     @else
-                                    <td class="text-center">{{$order->date_done}}</td>
+                                    <td class="text-center">{{ date_format(date_create($order->date_done), 'd M Y, H:i') }}</td>
                                     @endif
                                 </tr>
                             </tbody>
