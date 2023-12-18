@@ -156,7 +156,7 @@
                 data: datas,
                 success: function(response) {
                     for (let i = 0; i < response.datas.length; i++) {
-                        tables.innerHTML = `
+                        tables.innerHTML += `
                                         <tr>
                                             <td class="border-bottom-0">
                                                 <h6 class="fw-semibold mb-0">${response.datas[i].customer_name}</h6>
