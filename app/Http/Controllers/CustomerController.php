@@ -104,6 +104,7 @@ Silakan buka website Siyati untuk memproses!");
     public function doneOrder($id) {
         $order = Order::find($id);
         $order->order_status_job = 'done';
+        $order->date_done = Carbon::now();
         $order->save();
         return redirect()->back()->with('success', 'Berhasil menyelesaikan permintaan!');
     }

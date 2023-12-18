@@ -77,6 +77,7 @@ Route::post('/administrator/ecosystem-filter-member', [AdministratorController::
 
 // Armada
 Route::get('/armada/beranda', [ArmadaController::class, 'home']);
+Route::get('/armada/riwayat', [ArmadaController::class, 'history']);
 Route::get('/armada/berangkat/{id}', [ArmadaController::class, 'onTheWay']);
 Route::get('/armada/bekerja/{id}', [ArmadaController::class, 'doTheWork']);
 

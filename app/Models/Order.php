@@ -32,6 +32,11 @@ class Order extends Model
         'payment_url',
         'payment_message',
         'order_proof_photo',
+        'date_payed',
+        'date_queue',
+        'date_on_the_way',
+        'date_process',
+        'date_done',
     ];
 
     public function tripay_channel(): BelongsTo

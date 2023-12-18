@@ -9,6 +9,7 @@ use App\Models\Kelurahan;
 use App\Models\Nomenclature;
 use App\Models\Order;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -180,6 +181,7 @@ class AdministratorController extends Controller
         $order = Order::find($request->order);
         $order->armada_id = $request->armada_id;
         $order->order_status_job = 'on_queue';
+        $order->date_queue = Carbon::now();
         $order->save();
         return redirect()->back()->with('success', 'Berhasil memilih armada!');
     }
@@ -194,6 +196,7 @@ class AdministratorController extends Controller
     public function doneOrder($id) {
         $order = Order::find($id);
         $order->order_status_job = 'done';
+        $order->date_done = Carbon::now();
         $order->save();
         return redirect()->back()->with('success', 'Berhasil menyelesaikan permintaan!');
     }
@@ -373,6 +376,7 @@ class AdministratorController extends Controller
         switch ($checkTransaction->data->status) {
             case 'PAID':
                 $order->order_status_payment = 'payed';
+                $order->date_payed = Carbon::now();
                 $order->save();
                 return redirect()->back()->with('success', 'Pemesanan dengan invoice '. $order->order_invoice .' berhasil dibayar!');
             case 'EXPIRED':

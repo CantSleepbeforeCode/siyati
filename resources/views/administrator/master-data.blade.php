@@ -148,7 +148,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table id="table1" class="table text-nowrap mb-0 align-middle">
+                        <table id="table2" class="table text-nowrap mb-0 align-middle">
                             <thead class="text-dark fs-4">
                                 <tr>
                                     <th class="border-bottom-0">
@@ -465,6 +465,9 @@
             responsive: true
         });
         new DataTable('#table1', {
+            responsive: true
+        });
+        new DataTable('#table2', {
             responsive: true
         });
     </script>

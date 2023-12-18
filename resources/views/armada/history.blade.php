@@ -36,7 +36,7 @@
                 <div class="card-body p-4">
                     <div class="row">
                         <div class="col">
-                            <h5 class="card-title fw-semibold mb-4">Penugasan Saya</h5>
+                            <h5 class="card-title fw-semibold mb-4">Riwayat Pekerjaan Saya</h5>
                         </div>
                     </div>
                     <div class="table-responsive">

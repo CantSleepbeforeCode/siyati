@@ -133,7 +133,7 @@
                                             </td>
                                             <td class="border-bottom-0">
                                                 <h6 class="fw-semibold mb-0 fs-4">
-                                                    {{ date_format(date_create($order->order_date), 'd M Y') }}</h6>
+                                                    {{ date_format(date_create($order->order_date), 'd M Y, H:i') }}</h6>
                                             </td>
                                             <td class="border-bottom-0">
                                                 <a href="https://maps.google.com/?q={{ $order->customer->customer_lat }},{{ $order->customer->customer_long }}"
@@ -350,6 +350,59 @@
                                     </div>
                                 </div>
                             @endif
+
+                            <hr class="mt-4 mb-2">
+                            <b><p>Proses Pengerjaan</p></b>
+                            <table class="table">
+                                <thead class="thead-primary">
+                                    <tr>
+                                        <th>Tahap</th>
+                                        <th class="text-center">Tanggal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Dibayar</td>
+                                        @if($order->date_payed == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{$order->date_payed}}</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
+                                        <td>Dalam Antrian</td>
+                                        @if($order->date_queue == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{$order->date_queue}}</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
+                                        <td>Dalam Perjalanan</td>
+                                        @if($order->date_on_the_way == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{$order->date_on_the_way}}</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
+                                        <td>Dalam Pengerjaan</td>
+                                        @if($order->date_process == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{$order->date_process}}</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
+                                        <td>Selesai</td>
+                                        @if($order->date_done == null)
+                                        <td class="text-center">-</td>
+                                        @else
+                                        <td class="text-center">{{$order->date_done}}</td>
+                                        @endif
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
