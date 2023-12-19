@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use App\Models\Armada;
 use App\Models\Customer;
 use App\Models\Order;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class ArmadaController extends Controller
 {
-    
+
     private $maxSize = 1048576;
     protected $apiController;
 
@@ -32,47 +33,78 @@ class ArmadaController extends Controller
         });
     }
 
-    public function home() {
+    public function home()
+    {
         $armada = Armada::where('user_id', Auth::id())->first();
         $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer', 'armada.kecamatan'])->where('armada_id', $armada->armada_id)->whereIn('order_status_job', ['on_queue', 'on_the_way', 'on_process', 'rejected'])->orderBy('order_id', 'desc')->get();
         return view('armada.home', ['orders' => $orders]);
     }
 
-    public function history() {
+    public function history()
+    {
         $armada = Armada::where('user_id', Auth::id())->first();
         $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer', 'armada.kecamatan'])->where('armada_id', $armada->armada_id)->whereIn('order_status_job', ['done'])->orderBy('order_id', 'desc')->get();
         return view('armada.history', ['orders' => $orders]);
     }
 
-    public function onTheWay($id) {
-        $order = Order::find($id);
+    public function onTheWay($id)
+    {
+        $order = Order::with('armada')->where('order_id', $id)->first();
         $order->order_status_job = 'on_the_way';
         $order->date_on_the_way = Carbon::now();
         $order->save();
+        $customer = Customer::find($order->customer_id);
+        $this->apiController->sendMessageWhatsapp(
+            $customer->customer_phone,
+            "Halo " . $customer->customer_name . "!
+        
+Petugas " . $order->armada->armada_driver . " kami sedang dalam perjalanan, mohon menunggu di lokasi anda. Terimakasih!"
+        );
+        $this->apiController->sendMessageWhatsapp(
+            AppSetting::find(1)->admin_wa,
+            "Halo Admin Siyati!
+
+Petugas " . $order->armada->armada_driver . " sedang dalam perjalanan untuk mengerjakan pesanan dengan invoice " . $order->order_invoice . "."
+        );
         return redirect()->back()->with('success', 'Status telah berubah. Hati - hati dijalan!');
     }
 
-    public function doTheWork($id) {
-        $order = Order::find($id);
+    public function doTheWork($id)
+    {
+        $order = Order::with('armada')->where('order_id', $id)->first();
         $customer = Customer::find($order->customer_id);
         $order->order_status_job = 'on_process';
         $order->date_process = Carbon::now();
-        if($order->order_payment_method == 'tunai') {
+        if ($order->order_payment_method == 'tunai') {
             $order->order_status_payment = 'payed';
             $order->date_payed = Carbon::now();
             $this->apiController->sendMessageWhatsapp(
-                $customer->customer_phone, 
+                $customer->customer_phone,
                 "Halo " . $customer->customer_name . "!
             
-Kami berhasil menerima dana anda! Silakan menunggu petugas kami dalam memproses Septic Tank anda. Terimakasih!");
+Kami berhasil menerima dana anda! Silakan menunggu petugas kami dalam memproses Septic Tank anda. Terimakasih!"
+            );
         }
+        $this->apiController->sendMessageWhatsapp(
+            $customer->customer_phone,
+            "Halo " . $customer->customer_name . "!
+        
+Petugas " . $order->armada->armada_driver . " kami sedang menyedot septic tank anda, mohon menunggu. Terimakasih!"
+        );
+        $this->apiController->sendMessageWhatsapp(
+            AppSetting::find(1)->admin_wa,
+            "Halo Admin Siyati!
+
+Petugas " . $order->armada->armada_driver . " sedang menyedot septic tank pesanan dengan invoice " . $order->order_invoice . "."
+        );
         $order->save();
         return redirect()->back()->with('success', 'Status telah berubah. Semangat bekerja!');
     }
 
-    public function proofOfWork(Request $request) {
-        $order = Order::find($request->order);
-
+    public function proofOfWork(Request $request)
+    {
+        $order = Order::with('armada')->where('order_id', $request->order)->first();
+        $customer = Customer::find($order->customer_id);
 
         $toPhoto = '/image';
         if ($request->has('order_proof_photo')) {
@@ -89,6 +121,18 @@ Kami berhasil menerima dana anda! Silakan menunggu petugas kami dalam memproses 
         }
 
         $order->save();
+        $this->apiController->sendMessageWhatsapp(
+            $customer->customer_phone,
+            "Halo " . $customer->customer_name . "!
+        
+Petugas " . $order->armada->armada_driver . " kami telah selesai menyedot septic tank anda, mohon menunggu. Terimakasih!"
+        );
+        $this->apiController->sendMessageWhatsapp(
+            AppSetting::find(1)->admin_wa,
+            "Halo Admin Siyati!
+
+Petugas " . $order->armada->armada_driver . " telah selesai menyedot septic tank pesanan dengan invoice " . $order->order_invoice . "."
+        );
         return redirect()->back()->with('success', 'Bukti anda telah di upload. Selamat beristirahat!');
     }
 }

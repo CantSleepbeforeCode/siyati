@@ -21,6 +21,7 @@ class Armada extends Model
         'armada_id_gps',
         'armada_subdistinct',
         'armada_driver_photo',
+        'armada_phone',
     ];
     public function user(): BelongsTo
     {

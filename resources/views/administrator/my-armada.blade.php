@@ -131,6 +131,10 @@
                                 <input type="text" class="form-control" id="" required name="armada_id_gps">
                             </div>
                             <div class="col-12 mb-3">
+                                <label for="" class="form-label">Nomor Telpon</label>
+                                <input type="text" class="form-control" id="" required name="armada_phone">
+                            </div>
+                            <div class="col-12 mb-3">
                                 <label for="" class="form-label">Wilayah</label>
                                 <select name="armada_subdistinct" id="" class="form-control">
                                     @foreach ($kecamatans as $kecamatan)
@@ -224,6 +228,10 @@
                             <div class="col-12 mb-3">
                                 <label for="" class="form-label">ID GPS</label>
                                 <input type="text" value="{{$armada->armada_id_gps}}" class="form-control" id="" required name="armada_id_gps">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="" class="form-label">Nomor Telpon</label>
+                                <input type="text" value="{{$armada->armada_phone}}" class="form-control" id="" required name="armada_phone">
                             </div>
                             <div class="col-12 mb-3">
                                 <label for="" class="form-label">Wilayah</label>

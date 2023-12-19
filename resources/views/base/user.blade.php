@@ -88,7 +88,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link-no-active" href="https://wa.me/6282290349259" target="__blank"
+                            <a class="sidebar-link-no-active" href="https://wa.me/{{\App\Models\AppSetting::find(1)->admin_wa}}" target="__blank"
                                 aria-expanded="false">
                                 <span>
                                     <i class="ti ti-brand-whatsapp"></i>

@@ -144,7 +144,10 @@
                                                 <button class="btn btn-info" data-bs-toggle="modal"
                                                     data-bs-target="#detailModal{{ $order->order_id }}">Detail</button>
 
-                                                @if ($order->order_status_payment == 'ordered' && $order->order_payment_method == 'non_tunai' && $order->channel_id != null)
+                                                @if (
+                                                    $order->order_status_payment == 'ordered' &&
+                                                        $order->order_payment_method == 'non_tunai' &&
+                                                        $order->channel_id != null)
                                                     <a href="/administrator/cek-pembayaran/{{ $order->order_invoice }}"
                                                         class="btn btn-success">Cek Pembayaran</a>
                                                 @endif
@@ -352,7 +355,9 @@
                             @endif
 
                             <hr class="mt-4 mb-2">
-                            <b><p>Proses Pengerjaan</p></b>
+                            <b>
+                                <p>Proses Pengerjaan</p>
+                            </b>
                             <table class="table">
                                 <thead class="thead-primary">
                                     <tr>
@@ -363,42 +368,47 @@
                                 <tbody>
                                     <tr>
                                         <td>Dibayar</td>
-                                        @if($order->date_payed == null)
-                                        <td class="text-center">-</td>
+                                        @if ($order->date_payed == null)
+                                            <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{ date_format(date_create($order->date_payed), 'd M Y, H:i') }}</td>
+                                            <td class="text-center">
+                                                {{ date_format(date_create($order->date_payed), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                     <tr>
                                         <td>Dalam Antrian</td>
-                                        @if($order->date_queue == null)
-                                        <td class="text-center">-</td>
+                                        @if ($order->date_queue == null)
+                                            <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{ date_format(date_create($order->date_queue), 'd M Y, H:i') }}</td>
+                                            <td class="text-center">
+                                                {{ date_format(date_create($order->date_queue), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                     <tr>
                                         <td>Dalam Perjalanan</td>
-                                        @if($order->date_on_the_way == null)
-                                        <td class="text-center">-</td>
+                                        @if ($order->date_on_the_way == null)
+                                            <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{ date_format(date_create($order->date_on_the_way), 'd M Y, H:i') }}</td>
+                                            <td class="text-center">
+                                                {{ date_format(date_create($order->date_on_the_way), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                     <tr>
                                         <td>Dalam Pengerjaan</td>
-                                        @if($order->date_process == null)
-                                        <td class="text-center">-</td>
+                                        @if ($order->date_process == null)
+                                            <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{ date_format(date_create($order->date_process), 'd M Y, H:i') }}</td>
+                                            <td class="text-center">
+                                                {{ date_format(date_create($order->date_process), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                     <tr>
                                         <td>Selesai</td>
-                                        @if($order->date_done == null)
-                                        <td class="text-center">-</td>
+                                        @if ($order->date_done == null)
+                                            <td class="text-center">-</td>
                                         @else
-                                        <td class="text-center">{{ date_format(date_create($order->date_done), 'd M Y, H:i') }}</td>
+                                            <td class="text-center">
+                                                {{ date_format(date_create($order->date_done), 'd M Y, H:i') }}</td>
                                         @endif
                                     </tr>
                                 </tbody>
@@ -439,6 +449,47 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <hr class="mt-2 mb-2">
+
+                                <table id="table-driver-{{ $order->order_id }}" class="table text-nowrap" style="width: 100%;">
+                                    <thead >
+                                        <tr>
+                                            <th>Armada</th>
+                                            <th>Invoice</th>
+                                            <th>Tahap Pengerjaan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($armadaAssigns as $armadaAssign)
+                                            <tr>
+                                                <td>{{ $armadaAssign->armada->armada_driver }}</td>
+                                                <td>{{ $armadaAssign->order_invoice }}</td>
+                                                <td>
+                                                    @if ($armadaAssign->order_status_job == 'not_start')
+                                                        <span class="badge bg-dark rounded-3 fw-semibold">Belum
+                                                            Dimulai</span>
+                                                    @elseif($armadaAssign->order_status_job == 'on_queue')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Dalam
+                                                            Antrian</span>
+                                                    @elseif($armadaAssign->order_status_job == 'on_the_way')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang
+                                                            Dijalan</span>
+                                                    @elseif($armadaAssign->order_status_job == 'on_process')
+                                                        <span class="badge bg-info rounded-3 fw-semibold">Sedang
+                                                            Dikerjakan</span>
+                                                    @elseif($armadaAssign->order_status_job == 'done')
+                                                        <span
+                                                            class="badge bg-success rounded-3 fw-semibold">Selesai</span>
+                                                    @elseif($armadaAssign->order_status_job == 'rejected')
+                                                        <span
+                                                            class="badge bg-danger rounded-3 fw-semibold">Ditolak</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -503,5 +554,12 @@
             responsive: true,
             ordering: false
         });
+
+        @foreach ($orders as $order)
+            new DataTable('#table-driver-{{ $order->order_id }}', {
+                responsive: true,
+                ordering: false
+            });
+        @endforeach
     </script>
 @endsection

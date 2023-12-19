@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use App\Models\Customer;
 use App\Models\DetailOrderSepithank;
 use App\Models\Kecamatan;
@@ -88,7 +89,7 @@ class CustomerController extends Controller
             }
 
             $this->apiController->sendMessageWhatsapp(
-                '682290349259', 
+                AppSetting::find(1)->admin_wa, 
                 "Halo Admin Siyati!
             
 Terdapat permintaan sedot tinja baru dari " . $customer->customer_name . " dengan tipe bangunan " . $customer->customer_nomenklatur . "!
@@ -106,6 +107,11 @@ Silakan buka website Siyati untuk memproses!");
         $order->order_status_job = 'done';
         $order->date_done = Carbon::now();
         $order->save();
+        $this->apiController->sendMessageWhatsapp(
+            AppSetting::find(1)->admin_wa, 
+            "Halo Admin Siyati!
+        
+Pesanan dengan invoice ".$order->order_invoice." telah ditandai selesai oleh pengguna! Silakan cek Website untuk memeriksa");
         return redirect()->back()->with('success', 'Berhasil menyelesaikan permintaan!');
     }
 

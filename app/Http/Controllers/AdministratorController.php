@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use App\Models\Armada;
 use App\Models\Customer;
 use App\Models\Kecamatan;
@@ -105,6 +106,7 @@ class AdministratorController extends Controller
         $armada->armada_plat = $request->armada_plat;
         $armada->armada_id_gps = $request->armada_id_gps;
         $armada->armada_subdistinct = $request->armada_subdistinct;
+        $armada->armada_phone = $request->armada_phone;
 
         $toPhoto = '/image';
         if ($request->has('armada_driver_photo')) {
@@ -131,6 +133,7 @@ class AdministratorController extends Controller
         $armada->armada_plat = $request->armada_plat;
         $armada->armada_id_gps = $request->armada_id_gps;
         $armada->armada_subdistinct = $request->armada_subdistinct;
+        $armada->armada_phone = $request->armada_phone;
 
         $toPhoto = '/image';
         if ($request->has('armada_driver_photo')) {
@@ -173,14 +176,30 @@ class AdministratorController extends Controller
     public function transaction() {
         $armadas = Armada::all();
         $orders = Order::with(['tripay_channel', 'detailOrderSepithank.sepithank', 'customer', 'armada.kecamatan'])->orderBy('order_date', 'desc')->get();
+        $armadaAssigns = Order::with('armada')->whereIn('order_status_job', ['on_queue', 'on_the_way', 'on_process'])->get();
 
-        return view('administrator.my-transaksi', ['orders' => $orders, 'armadas' => $armadas]);
+
+        return view('administrator.my-transaksi', ['orders' => $orders, 'armadas' => $armadas, 'armadaAssigns' => $armadaAssigns]);
     }
 
     public function pickArmada(Request $request) {
         $order = Order::find($request->order);
+        $customer = Customer::find($order->customer_id);
         $order->armada_id = $request->armada_id;
         $order->order_status_job = 'on_queue';
+        $armada = Armada::find($request->armada_id);
+        $this->apiController->sendMessageWhatsapp(
+            $customer->customer_phone,
+            "Halo " . $customer->customer_name . "!
+        
+Pesanan anda telah kami terima dan akan di proses oleh Petugas " . $order->armada->armada_driver . ", mohon menunggu. Terimakasih!"
+        );
+        $this->apiController->sendMessageWhatsapp(
+            $armada->armada_phone,
+            "Halo ".$armada->armada_driver."!
+
+Anda mendapat tugas baru! Silakan cek Website untuk info lebih lanjut."
+        );
         $order->date_queue = Carbon::now();
         $order->save();
         return redirect()->back()->with('success', 'Berhasil memilih armada!');
@@ -188,16 +207,30 @@ class AdministratorController extends Controller
 
     public function rejectOrder($id) {
         $order = Order::find($id);
+        $customer = Customer::find($order->customer_id);
         $order->order_status_job = 'rejected';
         $order->save();
+        $this->apiController->sendMessageWhatsapp(
+            $customer->customer_phone,
+            "Halo " . $customer->customer_name . "!
+        
+Maaf, Pesanan anda dengan invoice ".$order->order_invoice." kami tolak. Silakan hubungi admin kami untuk info lebih lanjut. Terimakasih!"
+        );
         return redirect()->back()->with('error', 'Berhasil menolak permintaan!');
     }
 
     public function doneOrder($id) {
         $order = Order::find($id);
+        $customer = Customer::find($order->customer_id);
         $order->order_status_job = 'done';
         $order->date_done = Carbon::now();
         $order->save();
+        $this->apiController->sendMessageWhatsapp(
+            $customer->customer_phone,
+            "Halo " . $customer->customer_name . "!
+        
+Pesanan anda dengan invoice ".$order->order_invoice." telah selesai. Terimakasih!"
+        );
         return redirect()->back()->with('success', 'Berhasil menyelesaikan permintaan!');
     }
 
@@ -372,12 +405,18 @@ class AdministratorController extends Controller
     {
         $order = Order::where('order_invoice', $invoice)->first();
         $checkTransaction = $this->apiController->getTransactionTripay($order);
-
+        $customer = Customer::find($order->customer_id);
         switch ($checkTransaction->data->status) {
             case 'PAID':
                 $order->order_status_payment = 'payed';
                 $order->date_payed = Carbon::now();
                 $order->save();
+                $this->apiController->sendMessageWhatsapp(
+                    $customer->customer_phone,
+                    "Halo " . $customer->customer_name . "!
+                
+Pesanan anda dengan invoice ".$order->order_invoice." telah berhasil dibayar. Terimakasih!"
+                );
                 return redirect()->back()->with('success', 'Pemesanan dengan invoice '. $order->order_invoice .' berhasil dibayar!');
             case 'EXPIRED':
                 $order->order_status_payment = 'fail_pay';
