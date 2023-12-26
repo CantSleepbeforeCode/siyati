@@ -67,7 +67,7 @@ class CustomerController extends Controller
             $order->order_invoice = $this->getUniqueCode() . sprintf('%0' . 10 . 's', $index + 1);
             $order->order_lat = $customer->customer_lat;
             $order->order_long = $customer->customer_long;
-            $order->order_price = 5000 * count($request->sepithank);
+            // $order->order_price = 5000 * count($request->sepithank);
             // if($price == null) {
             //     $order->order_price = 0;
             // } else {
@@ -76,17 +76,17 @@ class CustomerController extends Controller
             $order->order_status_payment = 'ordered';
             $order->order_status_job = 'not_start';
             $order->order_date = Carbon::now();
-            $order->order_payment_method = $request->order_payment_method;
+            // $order->order_payment_method = $request->order_payment_method;
             $order->save();
 
 
-            foreach ($request->sepithank as $sepithank) {
-                $detailOrder = new DetailOrderSepithank();
-                $detailOrder->order_id = $order->order_id;
-                $detailOrder->sepithank_id = $sepithank;
-                $detailOrder->price = 5000;
-                $detailOrder->save();
-            }
+            // foreach ($request->sepithank as $sepithank) {
+            //     $detailOrder = new DetailOrderSepithank();
+            //     $detailOrder->order_id = $order->order_id;
+            //     $detailOrder->sepithank_id = $sepithank;
+            //     $detailOrder->price = 5000;
+            //     $detailOrder->save();
+            // }
 
             $this->apiController->sendMessageWhatsapp(
                 AppSetting::find(1)->admin_wa, 
@@ -115,30 +115,7 @@ Pesanan dengan invoice ".$order->order_invoice." telah ditandai selesai oleh pen
         return redirect()->back()->with('success', 'Berhasil menyelesaikan permintaan!');
     }
 
-    public function paymentVirtual(Request $request)
-    {
-        $order = Order::find($request->order);
-        if ($order == null || $order->channel_id != null) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan, Silakan hubungi petugas.');
-        }
 
-        $order->channel_id = $request->channel;
-        $order->save();
-        $makePayment = $this->apiController->createTransactionTripay($order);
-
-        if ($makePayment->success) {
-            $data = $makePayment->data;
-            $order->payment_invoice = $data->reference;
-            $order->payment_expired = $data->expired_time;
-            $order->payment_url = $data->checkout_url;
-            $order->save();
-
-            return Redirect($data->checkout_url);
-        } else {
-            $order->channel_id = null;
-            return redirect()->back()->with('error', 'Gagal Melakukan pembayaran, silahkan ulangi beberapa saat lagi.');
-        }
-    }
 
     public function payment()
     {

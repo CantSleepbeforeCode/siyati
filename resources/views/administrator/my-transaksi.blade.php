@@ -77,8 +77,8 @@
                                             <td class="border-bottom-0">
                                                 @if ($order->order_payment_method == 'tunai')
                                                     <h6 class="fw-semibold mb-1">Tunai</h6>
-                                                    <span class="fw-normal">Melalui Admin</span>
-                                                @else
+                                                    <span class="fw-normal">Melalui Driver</span>
+                                                @elseif ($order->order_payment_method == 'non_tunai')
                                                     <h6 class="fw-semibold mb-1">Non Tunai</h6>
                                                     @if ($order->channel_id == null)
                                                         <span class="fw-normal">-</span>
@@ -86,13 +86,15 @@
                                                         <span
                                                             class="fw-normal">{{ $order->tripay_channel->channel_name }}</span>
                                                     @endif
+                                                @else
+                                                <span class="fw-normal">-</span>
                                                 @endif
                                             </td>
                                             <td class="border-bottom-0">
                                                 @if ($order->order_price == 0)
                                                     <p class="mb-0 fw-normal text-center">-</p>
                                                 @else
-                                                    {{-- <p class="mb-0 fw-normal">{{ rupiah($order->order_price) }}</p> --}}
+                                                    <p class="mb-0 fw-normal">{{ rupiah($order->order_price) }}</p>
                                                 @endif
                                             </td>
                                             <td class="border-bottom-0 text-center">
@@ -152,11 +154,11 @@
                                                         class="btn btn-success">Cek Pembayaran</a>
                                                 @endif
 
-                                                @if ($order->order_status_payment == 'ordered')
-                                                    @if ($order->order_status_job == 'not_start' && $order->order_payment_method == 'tunai')
-                                                        <button class="btn btn-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#driverModal{{ $order->order_id }}">Pilih
-                                                            Driver</button>
+                                                @if ($order->order_status_payment == 'ordered' && $order->order_status_job == 'not_start')
+                                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#driverModal{{ $order->order_id }}">Pilih
+                                                    Driver</button>
+                                                    {{-- @if ($order->order_payment_method == 'tunai')
                                                     @endif
                                                 @elseif(
                                                     $order->order_status_payment == 'done' &&
@@ -165,6 +167,7 @@
                                                     <button class="btn btn-primary" data-bs-toggle="modal"
                                                         data-bs-target="#driverModal{{ $order->order_id }}">Pilih
                                                         Driver</button>
+                                                @endif --}}
                                                 @endif
                                                 @if (
                                                     $order->order_status_job == 'not_start' ||
@@ -200,7 +203,7 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-striped">
+                            {{-- <table class="table table-striped">
                                 <tr>
                                     <td>Volume</td>
                                     <td>Unit</td>
@@ -213,7 +216,7 @@
                                         <td>{{ rupiah($detail->price) }}</td>
                                     </tr>
                                 @endforeach
-                            </table>
+                            </table> --}}
 
 
                             @if ($order->order_proof_photo != null)
@@ -435,16 +438,12 @@
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="" class="form-label">Wilayah</label>
-                                        <select name="armada_id" class="form-control">
+                                        <label for="" class="form-label">Driver</label>
+                                        <select id="select_armada_{{$order->order_id}}" name="armada_id" class="form-control" required onchange="changeDriver('select_armada_{{$order->order_id}}', 'driverTable{{$order->order_id}}')">
+                                            <option value="">--- Pilih Armada ---</option>
                                             @foreach ($armadas as $armada)
-                                                @if ($armada->armada_id == $armada->armada_subdistinct)
-                                                    <option value="{{ $armada->armada_id }}" selected>
-                                                        {{ $armada->armada_id }} - {{ $armada->armada_driver }}</option>
-                                                @else
-                                                    <option value="{{ $armada->armada_id }}">{{ $armada->armada_id }} -
-                                                        {{ $armada->armada_driver }}</option>
-                                                @endif
+                                            <option value="{{ $armada->armada_id }}">{{ $armada->armada_id }} -
+                                                {{ $armada->armada_driver }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -463,7 +462,7 @@
                                     <tbody>
                                         @foreach ($armadaAssigns as $armadaAssign)
                                             <tr>
-                                                <td>{{ $armadaAssign->armada->armada_driver }}</td>
+                                                <td>{{$armadaAssign->armada->armada_id}} - {{ $armadaAssign->armada->armada_driver }}</td>
                                                 <td>{{ $armadaAssign->order_invoice }}</td>
                                                 <td>
                                                     @if ($armadaAssign->order_status_job == 'not_start')
@@ -556,10 +555,16 @@
         });
 
         @foreach ($orders as $order)
-            new DataTable('#table-driver-{{ $order->order_id }}', {
+            var driverTable{{$order->order_id}} = new DataTable('#table-driver-{{ $order->order_id }}', {
                 responsive: true,
                 ordering: false
             });
         @endforeach
+
+        function changeDriver(name, table) {
+            let key = document.getElementById(name).value;
+
+            window[table].search(key).draw();
+        }
     </script>
 @endsection

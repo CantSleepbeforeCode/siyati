@@ -78,8 +78,8 @@
                                             <td class="border-bottom-0">
                                                 @if ($order->order_payment_method == 'tunai')
                                                     <h6 class="fw-semibold mb-1">Tunai</h6>
-                                                    <span class="fw-normal">Melalui Admin</span>
-                                                @else
+                                                    <span class="fw-normal">Melalui Driver</span>
+                                                @elseif ($order->order_payment_method == 'non_tunai')
                                                     <h6 class="fw-semibold mb-1">Non Tunai</h6>
                                                     @if ($order->channel_id == null)
                                                         <span class="fw-normal">-</span>
@@ -87,6 +87,8 @@
                                                         <span
                                                             class="fw-normal">{{ $order->tripay_channel->channel_name }}</span>
                                                     @endif
+                                                @else
+                                                <span class="fw-normal">-</span>
                                                 @endif
                                             </td>
                                             <td class="border-bottom-0">
@@ -140,14 +142,14 @@
                                                 <button class="btn btn-info" data-bs-toggle="modal"
                                                     data-bs-target="#detailModal{{ $order->order_id }}">Detail</button>
                                                 @if ($order->order_status_payment == 'ordered')
-                                                    @if ($order->order_payment_method == 'non_tunai' && $order->channel_id == null)
+                                                    {{-- @if ($order->order_payment_method == 'non_tunai' && $order->channel_id == null)
                                                         <button class="btn btn-primary" data-bs-toggle="modal"
                                                             data-bs-target="#paymentModal{{ $order->order_id }}"
                                                             onclick="updatePrice({{ $order->order_price }})">Bayar</button>
                                                     @elseif($order->channel_id != null)
                                                         <a href="{{ $order->payment_url }}"
                                                             class="btn btn-primary">Bayar</a>
-                                                    @endif
+                                                    @endif --}}
                                                 @endif
                                                 @if ($order->order_status_job == 'on_process')
                                                     <button class="btn btn-success" data-bs-toggle="modal"
@@ -174,15 +176,15 @@
                     <form action="/permintaan" method="POST">
                         @csrf
                         <div class="modal-body">
-                            <p>
+                            {{-- <p>
                                 <b>Metode Pembayaran</b>
                             </p>
                             <select name="order_payment_method" id="" class="form-control" required>
                                 <option value="">-- PILIH METODE PEMBAYARAN --</option>
                                 <option value="tunai">TUNAI</option>
                                 <option value="non_tunai">NON TUNAI</option>
-                            </select>
-                            <hr class="mt-3 mb-3">
+                            </select> --}}
+                            {{-- <hr class="mt-3 mb-3">
                             <p>
                                 <b>Pilih Septic Tank</b>
                             <div class="dropdown">
@@ -205,8 +207,8 @@
                                 <div id="msg" class="form-text text-danger"></div>
                                 <p class="text-center fw-bolder" id="price">Biaya yang harus anda bayar: Rp. 0.00</p>
                             </div>
-                            </p>
-                            <hr class="mt-3 mb-3">
+                            </p> --}}
+                            {{-- <hr class="mt-3 mb-3"> --}}
                             <p>
                                 <b>Apakah data anda telah benar?</b>
                             </p>
@@ -239,7 +241,7 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-striped">
+                            {{-- <table class="table table-striped">
                                 <tr>
                                     <td>Volume</td>
                                     <td>Unit</td>
@@ -252,7 +254,7 @@
                                         <td>{{ rupiah($detail->price) }}</td>
                                     </tr>
                                 @endforeach
-                            </table>
+                            </table> --}}
     
     
                             @if ($order->order_proof_photo != null)

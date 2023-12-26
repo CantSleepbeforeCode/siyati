@@ -89,7 +89,8 @@ class AdministratorController extends Controller
         
         $armadas = Armada::with('kecamatan', 'user')->get();
         $kecamatans = Kecamatan::all();
-        return view('administrator.my-armada', ['armadas' => $armadas, 'kecamatans' => $kecamatans, 'newIdArmada' => $newIdArmada]);
+        $armadaAssigns = Order::with('armada')->whereIn('order_status_job', ['on_queue', 'on_the_way', 'on_process', 'done'])->whereDate('order_date', Carbon::today())->get();
+        return view('administrator.my-armada', ['armadas' => $armadas, 'kecamatans' => $kecamatans, 'newIdArmada' => $newIdArmada, 'armadaAssigns' => $armadaAssigns]);
     }
 
     public function addArmada(Request $request) {
@@ -409,13 +410,15 @@ Pesanan anda dengan invoice ".$order->order_invoice." telah selesai. Terimakasih
         switch ($checkTransaction->data->status) {
             case 'PAID':
                 $order->order_status_payment = 'payed';
+                $order->order_status_job = 'on_process';
+                $order->date_process = Carbon::now();
                 $order->date_payed = Carbon::now();
                 $order->save();
                 $this->apiController->sendMessageWhatsapp(
                     $customer->customer_phone,
                     "Halo " . $customer->customer_name . "!
                 
-Pesanan anda dengan invoice ".$order->order_invoice." telah berhasil dibayar. Terimakasih!"
+Pesanan anda dengan invoice ".$order->order_invoice." telah berhasil dibayar dan akan dikerjakan oleh petugas kami. Terimakasih!"
                 );
                 return redirect()->back()->with('success', 'Pemesanan dengan invoice '. $order->order_invoice .' berhasil dibayar!');
             case 'EXPIRED':
@@ -441,6 +444,36 @@ Pesanan anda dengan invoice ".$order->order_invoice." telah berhasil dibayar. Te
 
         return [
             'datas' => $customers
+        ];
+    }
+
+    public function sumDriverRevenue(Request $request) {
+        $datas = Order::with('armada');
+        if($request->time == 'harian') {
+            $datas->whereDate('order_date', Carbon::today());
+        } else {
+            $datas->whereMonth('order_date', date('m'));
+            $datas->whereYear('order_date', date('Y'));
+        }
+
+        if($request->status == 'all') {
+            $datas->whereIn('order_status_job', ['on_queue', 'on_the_way', 'on_process', 'done']);
+        } else {
+            $datas->where('order_status_job', $request->status);
+        }
+
+        if($request->driver != 'all') {
+            $datas->where('armada_id', $request->armada);
+        }
+
+        $sum = 0;
+        foreach($datas->get() as $data) {
+            $sum = $sum + $data->order_price;
+        }
+        
+        return [
+            'datas' => $datas->get(),
+            'sum' => $sum
         ];
     }
 }

@@ -153,7 +153,7 @@
                                             <td class="border-bottom-0">
                                                 @if ($order->order_payment_method == 'tunai')
                                                     <h6 class="fw-semibold mb-1">Tunai</h6>
-                                                    <span class="fw-normal">Melalui Admin</span>
+                                                    <span class="fw-normal">Melalui Driver</span>
                                                 @else
                                                     <h6 class="fw-semibold mb-1">Non Tunai</h6>
                                                     @if ($order->channel_id == null)

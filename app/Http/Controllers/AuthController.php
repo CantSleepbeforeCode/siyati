@@ -108,11 +108,11 @@ class AuthController extends Controller
 
             $customer->save();
 
-            $sepithank = new Sepithank();
-            $sepithank->customer_id = $customer->customer_id;
-            $sepithank->sepithank_vol = $request->customer_vol;
-            $sepithank->sepithank_unit = $request->customer_unit;
-            $sepithank->save();
+            // $sepithank = new Sepithank();
+            // $sepithank->customer_id = $customer->customer_id;
+            // $sepithank->sepithank_vol = $request->customer_vol;
+            // $sepithank->sepithank_unit = $request->customer_unit;
+            // $sepithank->save();
             
             Auth::login($newUser);
             return redirect('/beranda');

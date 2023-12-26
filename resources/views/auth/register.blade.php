@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-3">
+        {{-- <div class="row mb-3">
             <div class="col-9">
                 <label for="" class="form-label">Vol Kapasitas Septic Tank / M3</label>
                 <input type="number" class="form-control" id="" required name="customer_vol">
@@ -65,7 +65,7 @@
                     <option value="KG">KG</option>
                 </select>
             </div>
-        </div>
+        </div> --}}
         <div class="mb-4">
             <label for="" class="form-label">Foto Rumah</label>
             <input type="file" required name="customer_photo" class="form-control" id="">

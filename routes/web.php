@@ -35,15 +35,14 @@ Route::get('/permintaan', [CustomerController::class, 'request']);
 Route::get('/pembayaran', [CustomerController::class, 'payment']);
 Route::get('/laporan', [CustomerController::class, 'report']);
 Route::get('/e-card-siyati', [CustomerController::class, 'ecard']);
-Route::get('/septic-tank', [CustomerController::class, 'sepithank']);
-Route::get('/hapus-sepithank/{id}', [CustomerController::class, 'deleteSepithank']);
+// Route::get('/septic-tank', [CustomerController::class, 'sepithank']);
+// Route::get('/hapus-sepithank/{id}', [CustomerController::class, 'deleteSepithank']);
 Route::get('/selesaikan-permintaan/{id}', [CustomerController::class, 'doneOrder']);
 
 Route::post('/ubah-profil', [AuthController::class, 'changeProfile']);
 Route::post('/permintaan', [CustomerController::class, 'request']);
-Route::post('/select-payment-virtual', [CustomerController::class, 'paymentVirtual']);
-Route::post('/tambah-sepithank', [CustomerController::class, 'addSepithank']);
-Route::post('/edit-sepithank', [CustomerController::class, 'editSepithank']);
+// Route::post('/tambah-sepithank', [CustomerController::class, 'addSepithank']);
+// Route::post('/edit-sepithank', [CustomerController::class, 'editSepithank']);
 
 // Administrator
 Route::get('/administrator/beranda', [AdministratorController::class, 'home']);
@@ -74,6 +73,7 @@ Route::post('/administrator/tambah-armada', [AdministratorController::class, 'ad
 Route::post('/administrator/ubah-armada', [AdministratorController::class, 'editArmada']);
 Route::post('/administrator/pilih-driver', [AdministratorController::class, 'pickArmada']);
 Route::post('/administrator/ecosystem-filter-member', [AdministratorController::class, 'filterMember']);
+Route::post('/administrator/sum-revenue-driver', [AdministratorController::class, 'sumDriverRevenue']);
 
 // Armada
 Route::get('/armada/beranda', [ArmadaController::class, 'home']);
@@ -82,3 +82,5 @@ Route::get('/armada/berangkat/{id}', [ArmadaController::class, 'onTheWay']);
 Route::get('/armada/bekerja/{id}', [ArmadaController::class, 'doTheWork']);
 
 Route::post('/armada/upload-bukti-pengerjaan', [ArmadaController::class, 'proofOfWork']);
+Route::post('/armada/pilih-metode-pembayaran', [ArmadaController::class, 'selectPayment']);
+Route::post('/select-payment-virtual', [ArmadaController::class, 'paymentVirtual']);

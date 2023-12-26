@@ -14,5 +14,6 @@ class AppSetting extends Model
     protected $keyType = 'string';
     protected $fillable = [
         'admin_wa',
+        'price_per_cubic'
     ];
 }

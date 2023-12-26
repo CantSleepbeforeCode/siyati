@@ -47,14 +47,14 @@
                                 <span class="hide-menu">Beranda</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
+                        {{-- <li class="sidebar-item">
                             <a class="sidebar-link" href="/septic-tank" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-box"></i>
                                 </span>
                                 <span class="hide-menu">Septic Tank</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/permintaan" aria-expanded="false">
                                 <span>
